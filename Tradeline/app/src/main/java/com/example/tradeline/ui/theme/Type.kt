@@ -29,9 +29,13 @@ val Roboto = FontFamily(
 
 val Typography = Typography(
     displayLarge = TextStyle(
+        fontWeight = FontWeight.Bold,
+        fontSize = 6.sp
+    ),
+    displayMedium = TextStyle(
         fontFamily = Roboto,
         fontWeight = FontWeight.Bold,
-        fontSize = 22.sp
+        fontSize = 8.sp
     )
 
 )

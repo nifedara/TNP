@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "transactions",
     foreignKeys = [
     ForeignKey(entity = User::class, parentColumns = ["storeName"], childColumns = ["userStoreName"]),
-        ForeignKey(entity = Product::class, parentColumns = ["productId"], childColumns = ["transactionProductId"])
+        //ForeignKey(entity = Product::class, parentColumns = ["productId"], childColumns = ["transactionProductId"])
 ])
 data class Transaction (
     @PrimaryKey(autoGenerate = true) val transactionId: Long,

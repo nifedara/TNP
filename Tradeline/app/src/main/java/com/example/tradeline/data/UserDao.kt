@@ -11,6 +11,6 @@ interface UserDao {
 
     //insert a new user on signup
     @Insert
-    suspend fun insertUser(user: User)
+    suspend fun insert(user: User)
 
 }
