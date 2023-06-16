@@ -12,9 +12,8 @@
         android:theme="@style/Theme.Tradeline"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.tradeline.TradelineApplication"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.Tradeline">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
