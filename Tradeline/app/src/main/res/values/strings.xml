@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">TRADELINE</string>
+    <string name="create_store">"CREATE STORE"</string>
+    <string name="log_in">"LOGIN"</string>
+    <string name="store_name">Store Name</string>
+    <string name="email_address">"Email Address"</string>
+    <string name="phone_number">"Phone Number"</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">"Confirm Password"</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="submit">"SUBMIT"</string>
+    <string name="have_an_account_already">"Already have an account? LOG IN"</string>
+    <string name="no_account_yet">"I don’t have an account. SIGN UP"</string>
+    <string name="create_your_store">"Create your store"</string>
+    <string name="login_to_your_store">"Login to your store"</string>
+    <string name="store_creation_success">"store has been created successfully"</string>
+    <string name="add_product">"Add Product"</string>
+    <string name="get_access">"GET ACCESS"</string>
+    <string name="forgot_password2">"Forgot Password"</string>
+</resources>
