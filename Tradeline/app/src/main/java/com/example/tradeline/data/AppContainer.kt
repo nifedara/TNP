@@ -9,14 +9,10 @@ interface AppContainer {
     val usersRepository: UsersRepository
 }
 
-/**
- * [AppContainer] implementation that provides instance of [OfflineUsersRepository]
- */
 class AppDataContainer(private val context: Context) : AppContainer {
-    /**
-     * Implementation for [UsersRepository]
-     */
+
+    //Implementation for UsersRepository
     override val usersRepository: UsersRepository by lazy {
-        OfflineUsersRepository(TradelineDatabase.getDatabase(context).userDao())
+        OfflineUserRepositories(TradelineDatabase.getDatabase(context).userDao())
     }
 }

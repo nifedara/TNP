@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.tradeline.TradelineApplication
+import com.example.tradeline.ui.screens.LoginScreenViewModel
 import com.example.tradeline.ui.screens.StoreCreationScreenViewModel
 
 /**
@@ -18,6 +19,13 @@ object AppViewModelProvider {
         initializer {
             StoreCreationScreenViewModel(tradelineApplication().container.usersRepository)
         }
+
+        // Initializer for LoginScreenViewModel
+        initializer {
+            LoginScreenViewModel(tradelineApplication().container.usersRepository)
+        }
+
+
     }
 }
 

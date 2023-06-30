@@ -12,6 +12,7 @@ import com.example.tradeline.ui.screens.*
 fun BottomNavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
+        route = Graph.HOME,
         startDestination = BottomNavRoute.Home.route
     ) {
         composable(route = BottomNavRoute.Home.route) {
