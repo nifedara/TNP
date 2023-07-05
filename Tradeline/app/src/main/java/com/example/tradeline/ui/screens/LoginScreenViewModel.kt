@@ -9,8 +9,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LoginScreenViewModel(private val usersRepository: UsersRepository) : ViewModel() {
-
+class LoginScreenViewModel(private val usersRepository: UsersRepository, userId: Int) : ViewModel() {
     val loginState = mutableStateOf(LoginState())
 
     suspend fun login(storeName: String, password: String) {
@@ -18,7 +17,8 @@ class LoginScreenViewModel(private val usersRepository: UsersRepository) : ViewM
             withContext(Dispatchers.IO) {
                 val user = usersRepository.getUserByStoreName(storeName).first()
                 if (user != null && user.password == password) {
-                    handleSuccessfulLogin()
+                    user.id?.let { handleSuccessfulLogin(it) }
+                    loginState.value = loginState.value.copy(userId = user.id)
                 } else {
                     handleInvalidCredentials()
                 }
@@ -26,17 +26,50 @@ class LoginScreenViewModel(private val usersRepository: UsersRepository) : ViewM
         }
     }
 
-
-    private fun handleSuccessfulLogin() {
-        loginState.value = LoginState(successfulLogin = true)
+    private fun handleSuccessfulLogin(userId: Int) {
+        loginState.value = loginState.value.copy(
+            successfulLogin = true,
+            userId = userId
+        )
     }
 
     private fun handleInvalidCredentials() {
-        loginState.value = LoginState(invalidCredentials = true)
+        loginState.value = loginState.value.copy(invalidCredentials = true)
     }
 }
 
+
+
 data class LoginState(
     val successfulLogin: Boolean = false,
-    val invalidCredentials: Boolean = false
+    val invalidCredentials: Boolean = false,
+    val userId: Int? = null
 )
+
+//class LoginScreenViewModel(private val usersRepository: UsersRepository) : ViewModel() {
+//
+//    val loginState = mutableStateOf(LoginState())
+//
+//    suspend fun login(storeName: String, password: String) {
+//        viewModelScope.launch {
+//            withContext(Dispatchers.IO) {
+//                val user = usersRepository.getUserByStoreName(storeName).first()
+//                if (user != null && user.password == password) {
+//                    handleSuccessfulLogin()
+//                } else {
+//                    handleInvalidCredentials()
+//                }
+//            }
+//        }
+//    }
+//
+//
+//    private fun handleSuccessfulLogin() {
+//        loginState.value = LoginState(successfulLogin = true)
+//    }
+//
+//    private fun handleInvalidCredentials() {
+//        loginState.value = LoginState(invalidCredentials = true)
+//    }
+//}
+

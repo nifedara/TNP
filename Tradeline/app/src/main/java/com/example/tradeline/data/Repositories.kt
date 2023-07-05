@@ -8,3 +8,16 @@ interface UsersRepository {
     suspend fun insertUser(user: User)
 
 }
+
+interface ProductsRepository {
+    fun getAllProductsByUserId(userId: Int): Flow<List<Product>>
+
+    fun getProduct(id: Int): Flow<Product>
+
+    suspend fun insertProduct(product: Product)
+
+    suspend fun updateProduct(product: Product)
+
+    suspend fun deleteProduct(product: Product)
+
+}

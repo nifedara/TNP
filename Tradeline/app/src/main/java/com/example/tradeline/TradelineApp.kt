@@ -55,6 +55,26 @@ fun TopBar(
     }
 }
 
+//@Composable
+//fun FAB(
+//    inventoryFab: Boolean,
+//    navigateUp: () -> Unit = {}
+//) {
+//    if (inventoryFab) {
+//        FloatingActionButton(
+//            onClick = {  },
+//            shape = MaterialTheme.shapes.medium,
+//            modifier = Modifier.padding(20.dp)
+//        ) {
+//            Icon(
+//                imageVector = Icons.Default.Add,
+//                contentDescription = ""
+//            )
+//        }
+//    }
+//}
+
+
 @Composable
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(

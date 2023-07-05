@@ -27,7 +27,7 @@ fun InventoryRestockProductScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Inventory Restock Product Screen")
+        Text(text = "Inventory Restock Product Screen Test")
     }
 }
 

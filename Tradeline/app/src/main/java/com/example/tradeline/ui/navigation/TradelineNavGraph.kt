@@ -17,9 +17,9 @@ fun BottomNavGraph(navController: NavHostController) {
     ) {
         composable(route = BottomNavRoute.Home.route) {
             DashboardScreen(
-                navigateToProfile = { navController.navigate(CreateStore.route) },
-                navigateToRestock = { navController.navigate(Login.route) },
-                navigateToAnalytics = { navController.navigate(Login.route) },
+                navigateToProfile = { navController.navigate(BottomNavRoute.Account.route) },
+                navigateToRestock = { navController.navigate(Restock.route) },
+                navigateToAnalytics = { navController.navigate(BottomNavRoute.Analytics.route) },
             )
         }
         composable(route = BottomNavRoute.Sales.route) {
@@ -27,9 +27,9 @@ fun BottomNavGraph(navController: NavHostController) {
         }
         composable(route = BottomNavRoute.Inventory.route) {
             InventoryScreen(
-                navigateToAddProduct = { navController.navigate(CreateStore.route) },
-                navigateToRestock = { navController.navigate(Login.route) },
-                navigateToProductDetails = { navController.navigate(Login.route) },
+                navigateToAddProduct = { navController.navigate(AddProduct.route) },
+                navigateToRestock = { navController.navigate(Restock.route) },
+                navigateToProductDetails = { navController.navigate(ProductDetails.route) },
             )
         }
         composable(route = BottomNavRoute.Analytics.route) {
@@ -48,11 +48,14 @@ fun NavGraphBuilder.tradelineNavGraph(navController: NavHostController) {
         startDestination = AddProduct.route
     ) {
         composable(route = AddProduct.route) {
+
             InventoryAddProductScreen(
                 navigateBack = { navController.popBackStack() },
+                onCreate = {navController.popBackStack()},
+                userId = it.arguments?.getInt("userId") ?: 0 // Pass the userId argument
             )
         }
-        composable(route = AddProduct.route) {
+        composable(route = Restock.route) {
             InventoryRestockProductScreen(
                 navigateBack = { navController.popBackStack() },
             )

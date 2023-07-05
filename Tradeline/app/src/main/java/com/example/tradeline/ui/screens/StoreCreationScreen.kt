@@ -28,7 +28,7 @@ fun StoreCreationScreen(
     navigateToLogin: () -> Unit,
     navigateBack: () -> Unit,
     canNavigateBack: Boolean = true,
-    viewModel: StoreCreationScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: StoreCreationScreenViewModel = viewModel(factory = AppViewModelProvider.createFactory())
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -153,3 +153,4 @@ fun StoreCreationScreen(
         }
     }
 }
+

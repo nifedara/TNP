@@ -12,6 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tradeline.R
+import com.example.tradeline.TopBar
 import java.text.DateFormat.getDateInstance
 import java.util.*
 
@@ -20,11 +21,21 @@ fun DashboardScreen(
     navigateToProfile: () -> Unit,
     navigateToRestock: () -> Unit,
     navigateToAnalytics: () -> Unit,
+    canNavigateBack: Boolean = false,
 ) {
+    Scaffold(
+        topBar = {
+            TopBar(
+                canNavigateBack = canNavigateBack
+            )
+        }
+    ) {
+        DashboardBody(navigateToProfile = navigateToProfile, navigateToRestock = navigateToRestock, navigateToAnalytics = navigateToAnalytics)
+    }
 }
 
 @Composable
-fun DashboardBody() {
+fun DashboardBody(navigateToProfile: () -> Unit, navigateToRestock: () -> Unit, navigateToAnalytics: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -32,12 +43,12 @@ fun DashboardBody() {
         verticalArrangement = Arrangement.Center,
         //horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        StoreProfile()
+        StoreProfile(navigateToProfile = navigateToProfile)
         CurrentDate()
         AccountCards()
         Text(text = "QUICK LINKS", modifier = Modifier.padding(top = 30.dp))
 
-        QuickLinksCard()
+        QuickLinksCard(navigateToRestock = navigateToRestock, navigateToAnalytics = navigateToAnalytics)
 
         Spacer(modifier = Modifier.height(4.dp))
 
@@ -48,7 +59,7 @@ fun DashboardBody() {
 }
 
 @Composable
-fun StoreProfile() {
+fun StoreProfile(navigateToProfile: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -63,6 +74,7 @@ fun StoreProfile() {
 
         Image(
             modifier = Modifier
+                .clickable { navigateToProfile() }
                 .size(18.dp)
                 .padding(4.dp)
                 .clip(MaterialTheme.shapes.extraSmall),
@@ -119,11 +131,11 @@ fun AlertsItem() { //TODO
 }
 
 @Composable
-fun QuickLinksCard() {
+fun QuickLinksCard(navigateToRestock: () -> Unit, navigateToAnalytics: () -> Unit) {
     Row {
-        RestockLinkCard(Modifier.weight(1f))
+        RestockLinkCard(Modifier.weight(1f).clickable { navigateToRestock() })
         Spacer(modifier = Modifier.width(4.dp))
-        AnalyticsLinkCard(Modifier.weight(2f))
+        AnalyticsLinkCard(Modifier.weight(2f).clickable { navigateToAnalytics() })
     }
 }
 
@@ -385,5 +397,5 @@ fun ProductsCard(modifier: Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun CurrentDatePreview() {
-    DashboardBody()
+    //DashboardBody()
 }

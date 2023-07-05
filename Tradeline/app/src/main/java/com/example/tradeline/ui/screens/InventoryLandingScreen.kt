@@ -1,49 +1,165 @@
 package com.example.tradeline.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
+import com.example.tradeline.BottomBar
+import com.example.tradeline.R
+import com.example.tradeline.TopBar
+import com.example.tradeline.data.Product
+import com.example.tradeline.ui.AppViewModelProvider
+
+//const val userIdArg = "userId"
 
 @Composable
 fun InventoryScreen(
     navigateToAddProduct: () -> Unit,
     navigateToRestock: () -> Unit,
-    navigateToProductDetails: () -> Unit,
+    navigateToProductDetails: (Int) -> Unit,
+    canNavigateBack: Boolean = false,
+    modifier: Modifier = Modifier,
+    //userId: Int, // Add the userId parameter
+    viewModel: InventoryLandingViewModel = viewModel(factory = AppViewModelProvider.createFactory())
+    //viewModel: InventoryLandingViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ){
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Inventory")
+    val navController = rememberNavController()
+
+    val homeUiState by viewModel.homeUiState.collectAsState()
+
+    Scaffold(
+        topBar = {
+            TopBar(
+                canNavigateBack = canNavigateBack,
+            )
+        },
+        bottomBar = { BottomBar(navController = navController) },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navigateToAddProduct() },
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.padding(20.dp)
+                    .paddingFromBaseline(bottom = 150.dp) // Adjust the vertical position
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = ""
+                )
+            }
+       },
+        floatingActionButtonPosition = FabPosition.End, // Position the FAB in the end
+        modifier = Modifier.navigationBarsPadding()
+    )
+    { innerPadding ->
+        InventoryBody(
+            itemList = homeUiState.itemList,
+            onItemClick = navigateToProductDetails,
+            modifier = modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        )
     }
 }
 
 @Composable
-fun InventoryBody(){}
+private fun InventoryBody(
+    itemList: List<Product>,
+    onItemClick: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        if (itemList.isEmpty()) {
+            Text(
+                text = "no product",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.h4
+            )
+        } else {
+            InventoryList(
+                itemList = itemList,
+                //onItemClick = { onItemClick(it.id) },
+                onItemClick = { },
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+        }
+    }
+}
 
 @Composable
-fun InventorySearchBar(){}
+private fun InventoryList(
+    itemList: List<Product>, onItemClick: (Product) -> Unit, modifier: Modifier = Modifier
+) {
+    LazyColumn(modifier = modifier) {
+        items(items = itemList, key = {}) { product ->
+            InventoryItem(item = product,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clickable { onItemClick(product) })
+        }
+    }
+}
 
 @Composable
-fun ProductList(){}
+private fun InventoryItem(
+    item: Product, modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier, elevation = 2.dp
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = item.name,
+                    style = MaterialTheme.typography.h5,
+                )
+                Spacer(Modifier.weight(1f))
+                Icons.Default.ArrowForward
 
-@Composable
-fun InventoryFAB(){}
+                //Text(text = item.formattedPrice(), style = MaterialTheme.typography.h4)
+            }
+            Text(
+                text = stringResource(R.string.in_stock, item.quantity),
+                style = MaterialTheme.typography.h3
+            )
+        }
+    }
+}
 
-@Composable
-fun CategoryDrawer(){}
 
-@Composable
-fun InventoryEditProductBtn(){}
 
-@Composable
-fun InventoryEditProductAlertBox(){}
+
+//@Composable
+//fun InventoryFAB(){}
+//
+//@Composable
+//fun CategoryDrawer(){}
+//
+//@Composable
+//fun InventoryEditProductBtn(){}
+//
+//@Composable
+//fun InventoryEditProductAlertBox(){}
