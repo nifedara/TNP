@@ -1,6 +1,7 @@
 package com.example.tradeline.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,8 +15,11 @@ fun RootNavigationGraph(navController: NavHostController) {
         startDestination = Graph.ONBOARDING
     ) {
         onboardingNavGraph(navController = navController)
-        composable(route = Graph.HOME) {
-            TradelineApp()
+        composable(route = "${Graph.HOME}/{userId}") {
+            val userId = remember { it.arguments?.getString("userId")?.toIntOrNull() }
+            if (userId != null) {
+                TradelineApp(userId = userId)
+            }
         }
     }
 }
@@ -23,6 +27,9 @@ fun RootNavigationGraph(navController: NavHostController) {
 object Graph {
     const val ROOT = "root_graph"
     const val ONBOARDING = "onboarding_graph"
-    const val HOME = "home_graph"
-    const val TRADELINE = "tradeline_graph"
+    const val HOME = "home_graph/{userId}"
+    const val TRADELINE = "tradeline_graph/{userId}"
 }
+
+
+

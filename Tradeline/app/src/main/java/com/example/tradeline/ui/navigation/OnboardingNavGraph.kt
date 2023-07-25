@@ -21,7 +21,7 @@ fun NavGraphBuilder.onboardingNavGraph(navController: NavHostController) {
             StoreCreationScreen(
                 navigateBack = { navController.popBackStack() },
                 navigateToLogin = { navController.navigate(Login.route) },
-                onSubmit = { navController.navigate(Graph.HOME) }
+                onSubmit = { navController.navigate(Graph.HOME + "/$it") }
             )
         }
         composable(route = Login.route) {
@@ -29,7 +29,7 @@ fun NavGraphBuilder.onboardingNavGraph(navController: NavHostController) {
                 navigateBack = { navController.popBackStack() },
                 navigateToStoreCreation = { navController.navigate(CreateStore.route) },
                 navigateToForgotPassword = { navController.navigate(ForgotPassword.route) },
-                onLogin = { navController.navigate(Graph.HOME) }
+                onLogin = { navController.navigate(Graph.HOME + "/$it") }
             )
         }
         composable(route = ForgotPassword.route) {

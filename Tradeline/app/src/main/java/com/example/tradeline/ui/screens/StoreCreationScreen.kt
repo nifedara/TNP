@@ -15,6 +15,7 @@ import com.example.tradeline.R
 import com.example.tradeline.TopBar
 import com.example.tradeline.ui.AppViewModelProvider
 import com.example.tradeline.ui.navigation.NavigationDestination
+import com.example.tradeline.ui.screens.viewModel.StoreCreationScreenViewModel
 import kotlinx.coroutines.launch
 
 object CreateStore : NavigationDestination {
@@ -24,13 +25,16 @@ object CreateStore : NavigationDestination {
 //The store creation screen. Has the form fields to collect sign up data
 @Composable
 fun StoreCreationScreen(
-    onSubmit: () -> Unit,
+    onSubmit: (Int) -> Unit,
     navigateToLogin: () -> Unit,
     navigateBack: () -> Unit,
     canNavigateBack: Boolean = true,
     viewModel: StoreCreationScreenViewModel = viewModel(factory = AppViewModelProvider.createFactory())
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val loggedInUser = viewModel.currentUser
+
+    val loggedUserId = viewModel.userId
 
     var storeName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -130,7 +134,12 @@ fun StoreCreationScreen(
                                 password,
                                 confirmPassword
                             )
-                            onSubmit()
+                            //onSubmit(loggedUserId!!)
+                            loggedUserId?.let { onSubmit(it) }
+                            //onSubmit(loggedInUser.value!!.id!!)
+//                            loggedInUser.value?.let { user ->
+//                                user.id?.let { onSubmit(it) }
+//                            }
                         }
                     },
                     modifier = Modifier

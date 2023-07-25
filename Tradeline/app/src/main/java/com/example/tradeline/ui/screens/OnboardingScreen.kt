@@ -18,6 +18,7 @@ import com.example.tradeline.ui.navigation.NavigationDestination
 //defines the screen's route
 object Onboarding : NavigationDestination {
     override val route = "onboard"
+    //const val userId = "userId"
 }
 
 /**

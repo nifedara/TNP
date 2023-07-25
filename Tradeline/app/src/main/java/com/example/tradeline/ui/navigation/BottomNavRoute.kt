@@ -36,3 +36,4 @@ sealed class BottomNavRoute(
         icon = R.drawable.nav_account_icon
     )
 }
+

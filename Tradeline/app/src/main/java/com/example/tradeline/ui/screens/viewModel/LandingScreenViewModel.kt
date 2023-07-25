@@ -1,4 +1,4 @@
-package com.example.tradeline.ui.screens
+package com.example.tradeline.ui.screens.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,12 +9,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class InventoryLandingViewModel(
-    private val userId: Int,
-    private val productsRepository: ProductsRepository,
-    ) : ViewModel() {
-
-    //private val userId: Int = checkNotNull(savedStateHandle[userIdArg])
+class InventoryLandingViewModel(private val productsRepository: ProductsRepository,
+                                userId: Int) : ViewModel() {
 
     val homeUiState: StateFlow<HomeUiState> =
 

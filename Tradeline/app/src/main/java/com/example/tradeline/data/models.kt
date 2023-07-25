@@ -1,7 +1,6 @@
 package com.example.tradeline.data
 
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "users")
@@ -15,17 +14,18 @@ data class User(
 )
 
 @Entity(tableName = "products",
-        foreignKeys = [ForeignKey(
-            entity = User::class,
-            parentColumns = ["id"],
-            childColumns = ["userId"],
-            onDelete = ForeignKey.CASCADE)])
+//        foreignKeys = [ForeignKey(
+//            entity = User::class,
+//            parentColumns = ["id"],
+//            childColumns = ["userId"],
+//            onDelete = ForeignKey.CASCADE)]
+)
 data class Product(
     @PrimaryKey(autoGenerate = true) val id: Int? = null,
-    val name: String,
+    var name: String,
     val quantity: Int,
     val description: String,
     val costPrice: Double,
-    val sellingPrice: Double,
-    val userId: Int = 0 // Foreign key
+    var sellingPrice: Double,
+    val userId: Int? = null // Foreign key
 )

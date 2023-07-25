@@ -19,27 +19,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
-import com.example.tradeline.BottomBar
 import com.example.tradeline.R
 import com.example.tradeline.TopBar
 import com.example.tradeline.data.Product
 import com.example.tradeline.ui.AppViewModelProvider
-
-//const val userIdArg = "userId"
+import com.example.tradeline.ui.screens.viewModel.InventoryLandingViewModel
 
 @Composable
 fun InventoryScreen(
+    userId: Int, // Add the userId parameter
     navigateToAddProduct: () -> Unit,
     navigateToRestock: () -> Unit,
     navigateToProductDetails: (Int) -> Unit,
     canNavigateBack: Boolean = false,
     modifier: Modifier = Modifier,
-    //userId: Int, // Add the userId parameter
-    viewModel: InventoryLandingViewModel = viewModel(factory = AppViewModelProvider.createFactory())
-    //viewModel: InventoryLandingViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: InventoryLandingViewModel = viewModel(factory = AppViewModelProvider.createFactory(userId))
 ){
-    val navController = rememberNavController()
 
     val homeUiState by viewModel.homeUiState.collectAsState()
 
@@ -49,7 +44,6 @@ fun InventoryScreen(
                 canNavigateBack = canNavigateBack,
             )
         },
-        bottomBar = { BottomBar(navController = navController) },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { navigateToAddProduct() },
@@ -70,9 +64,7 @@ fun InventoryScreen(
         InventoryBody(
             itemList = homeUiState.itemList,
             onItemClick = navigateToProductDetails,
-            modifier = modifier
-                .padding(innerPadding)
-                .fillMaxSize()
+            modifier = modifier.padding(innerPadding).fillMaxSize()
         )
     }
 }
@@ -96,8 +88,7 @@ private fun InventoryBody(
         } else {
             InventoryList(
                 itemList = itemList,
-                //onItemClick = { onItemClick(it.id) },
-                onItemClick = { },
+                onItemClick = { onItemClick(it.id!!) },
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
         }
@@ -109,7 +100,7 @@ private fun InventoryList(
     itemList: List<Product>, onItemClick: (Product) -> Unit, modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
-        items(items = itemList, key = {}) { product ->
+        items(items = itemList, key = {it.id!!}) { product ->
             InventoryItem(item = product,
                 modifier = Modifier
                     .padding(8.dp)
@@ -149,17 +140,3 @@ private fun InventoryItem(
     }
 }
 
-
-
-
-//@Composable
-//fun InventoryFAB(){}
-//
-//@Composable
-//fun CategoryDrawer(){}
-//
-//@Composable
-//fun InventoryEditProductBtn(){}
-//
-//@Composable
-//fun InventoryEditProductAlertBox(){}

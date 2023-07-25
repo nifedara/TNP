@@ -11,12 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.tradeline.ui.navigation.NavigationDestination
 
-object Restock : NavigationDestination {
+object Re_stock : NavigationDestination {
     override val route = "restock"
 }
 
 @Composable
-fun InventoryRestockProductScreen(
+fun Inventory_RestockProductScreen(
     navigateBack: () -> Unit,
     canNavigateBack: Boolean = true,
 ){
@@ -31,8 +31,8 @@ fun InventoryRestockProductScreen(
     }
 }
 
-@Composable
-fun RestockProductBody(){}
-
-@Composable
-fun RestockProductForm(){}
+//@Composable
+//fun RestockProductBody(){}
+//
+//@Composable
+//fun RestockProductForm(){}

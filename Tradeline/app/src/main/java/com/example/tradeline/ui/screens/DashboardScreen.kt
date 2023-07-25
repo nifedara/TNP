@@ -7,10 +7,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.tradeline.R
 import com.example.tradeline.TopBar
 import java.text.DateFormat.getDateInstance
@@ -21,12 +23,11 @@ fun DashboardScreen(
     navigateToProfile: () -> Unit,
     navigateToRestock: () -> Unit,
     navigateToAnalytics: () -> Unit,
-    canNavigateBack: Boolean = false,
 ) {
     Scaffold(
         topBar = {
             TopBar(
-                canNavigateBack = canNavigateBack
+                canNavigateBack = false
             )
         }
     ) {
@@ -40,8 +41,7 @@ fun DashboardBody(navigateToProfile: () -> Unit, navigateToRestock: () -> Unit, 
         modifier = Modifier
             .fillMaxWidth()
             .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        //horizontalAlignment = Alignment.CenterHorizontally
+
     ) {
         StoreProfile(navigateToProfile = navigateToProfile)
         CurrentDate()
@@ -62,19 +62,19 @@ fun DashboardBody(navigateToProfile: () -> Unit, navigateToRestock: () -> Unit, 
 fun StoreProfile(navigateToProfile: () -> Unit) {
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { navigateToProfile() },
         horizontalArrangement = Arrangement.End
     )
     {
         Text(
             text = "Store", //TODO
             style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.primaryContainer,
+            color = Color(0xFF000000),
         )
 
         Image(
             modifier = Modifier
-                .clickable { navigateToProfile() }
                 .size(18.dp)
                 .padding(4.dp)
                 .clip(MaterialTheme.shapes.extraSmall),
@@ -90,7 +90,6 @@ fun CurrentDate() {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
-        // .padding(start = 24.dp),
         horizontalArrangement = Arrangement.Start
     )
     {
@@ -107,8 +106,237 @@ fun CurrentDate() {
         Text(
             text = currentDate,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.primaryContainer
+            color = Color(0xFF000000),
+
         )
+    }
+}
+
+
+@Composable
+fun AccountCards() {
+    Row {
+        SalesCard(Modifier.weight(1f))
+
+        Spacer(modifier = Modifier.width(4.dp))
+
+        ProfitCard(Modifier.weight(1f))
+
+        Spacer(modifier = Modifier.width(4.dp))
+
+        ProductsCard(Modifier.weight(1f))
+    }
+}
+
+@Composable
+fun SalesCard(modifier: Modifier) {
+    ElevatedCard(
+        modifier
+            .height(80.dp)
+            .offset(0.dp, 4.dp),
+        shape = MaterialTheme.shapes.small,
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = Color(0xFFE7F7FB)
+        )
+    )
+    {
+      /*  var amountVisibility by remember{mutableStateOf(false) }
+
+        val icon = if (amountVisibility)
+            painterResource(id = R.drawable.eye_icon)
+        else
+            painterResource(id = R.drawable.invisible_eye_icon)*/
+
+
+        Row(modifier.padding(top = 8.dp)) {
+
+            Text(
+                text = "Sales",
+                style = MaterialTheme.typography.labelSmall,
+                modifier=(Modifier.offset(6.dp)),
+                color = Color(0xFF000000)
+            )
+            Spacer(modifier = Modifier
+                .width(60.dp)
+                .height(30.dp))
+            IconButton(onClick = {
+                /*amountVisibility = !amountVisibility*/
+            }) {
+                /*AnimatedVisibility(amountVisibility) {}*/
+                    Icon(
+                        painter = painterResource(id = R.drawable.eye_icon),
+                        /*painter = icon,*/
+                        contentDescription = "hide icon",
+                        modifier
+                            .size(11.dp)
+                            .offset((-3).dp, (-3.5).dp)
+                    )
+
+
+            }
+        }
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(0.dp, (-22).dp),
+            horizontalArrangement = Arrangement.Center
+        )
+        {
+            Icon(
+                painter = painterResource(R.drawable.naira_icon),
+                contentDescription = "naira icon",
+                modifier = Modifier.padding(top = 5.2.dp)
+
+            )
+            Spacer(modifier = Modifier.width(2.dp))
+
+            Text(
+                text = "2000", /*if (amountVisibility) "2000" else ".....",*/ //TODO
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFF000000),
+            )
+        }
+
+    }
+}
+
+@Composable
+fun ProfitCard(modifier: Modifier) {
+    ElevatedCard(
+        modifier
+            .height(80.dp)
+            .offset(0.dp, 4.dp),
+        shape = MaterialTheme.shapes.small,
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = Color(0xFFE1F2CD)
+        )
+    )
+    {
+        Row(modifier.padding(top = 8.dp)) {
+
+            Text(
+                text = "Profit",
+                style = MaterialTheme.typography.labelSmall,
+                modifier=(Modifier.offset(6.dp)),
+                color = Color(0xFF000000)
+            )
+            Spacer(modifier = Modifier
+                .width(60.dp)
+                .height(30.dp))
+            IconButton(onClick = {
+                /*amountVisibility = !amountVisibility*/
+            }) {
+                /*AnimatedVisibility(amountVisibility) {}*/
+                Icon(
+                    painter = painterResource(id = R.drawable.eye_icon),
+                    /*painter = icon,*/
+                    contentDescription = "hide icon",
+                    modifier
+                        .size(11.dp)
+                        .offset((-3).dp, (-3.5).dp)
+                )
+
+
+            }
+        }
+
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(0.dp, (-22).dp),
+            horizontalArrangement = Arrangement.Center
+        )
+        {
+            Icon(
+                painter = painterResource(R.drawable.naira_icon),
+                contentDescription = "naira icon",
+                modifier = Modifier.padding(top = 5.2.dp)
+
+            )
+            Spacer(modifier = Modifier.width(2.dp))
+
+            Text(
+                text = "2000", /*if (amountVisibility) "2000" else ".....",*/ //TODO
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFF000000),
+            )
+        }
+
+    }
+}
+
+
+@Composable
+fun ProductsCard(modifier: Modifier) {
+    ElevatedCard(
+        modifier
+            .height(80.dp)
+            .offset(0.dp, 4.dp),
+        shape = MaterialTheme.shapes.small,
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = Color(0xFFCDCDE6)
+        )
+    )
+    {
+        Row(modifier.padding(top = 8.dp)) {
+
+            Text(
+                text = "Products",
+                style = MaterialTheme.typography.labelSmall,
+                modifier=(Modifier.offset(6.dp)),
+                color = Color(0xFF000000)
+            )
+            Spacer(modifier = Modifier
+                .width(35.dp)
+                .height(30.dp))
+            IconButton(onClick = {
+                /*amountVisibility = !amountVisibility*/
+            }) {
+                /*AnimatedVisibility(amountVisibility) {}*/
+                Icon(
+                    painter = painterResource(id = R.drawable.eye_icon),
+                    /*painter = icon,*/
+                    contentDescription = "hide icon",
+                    modifier
+                        .size(11.dp)
+                        .offset((-1).dp, (-3.5).dp)
+                )
+
+
+            }
+        }
+
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(0.dp, (-22).dp),
+            horizontalArrangement = Arrangement.Center
+        )
+        {
+            Icon(
+                painter = painterResource(R.drawable.naira_icon),
+                contentDescription = "naira icon",
+                modifier = Modifier.padding(top = 5.2.dp)
+
+            )
+            Spacer(modifier = Modifier.width(2.dp))
+
+            Text(
+                text = "2000", /*if (amountVisibility) "2000" else ".....",*/ //TODO
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color(0xFF000000),
+            )
+        }
+
     }
 }
 
@@ -133,9 +361,9 @@ fun AlertsItem() { //TODO
 @Composable
 fun QuickLinksCard(navigateToRestock: () -> Unit, navigateToAnalytics: () -> Unit) {
     Row {
-        RestockLinkCard(Modifier.weight(1f).clickable { navigateToRestock() })
-        Spacer(modifier = Modifier.width(4.dp))
-        AnalyticsLinkCard(Modifier.weight(2f).clickable { navigateToAnalytics() })
+        RestockLinkCard(Modifier.weight(1.5f).clickable { navigateToRestock()})
+        Spacer(modifier = Modifier.width(10.dp))
+        AnalyticsLinkCard(Modifier.weight(2f).clickable { navigateToAnalytics()})
     }
 }
 
@@ -143,37 +371,44 @@ fun QuickLinksCard(navigateToRestock: () -> Unit, navigateToAnalytics: () -> Uni
 fun RestockLinkCard(modifier: Modifier) {
     ElevatedCard(
         modifier
-            .height(108.dp)
-            .clickable {}, //TODO
+            .offset(0.dp, 4.dp)
+            .height(108.dp),
         shape = MaterialTheme.shapes.small,
-        colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.tertiary)
+        colors = CardDefaults.elevatedCardColors(containerColor = Color(0xFFF5F5F5))
     ) {
-        Column(modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
+        Column(modifier.fillMaxSize()) {
 
             Row(modifier.padding(top = 10.dp)) {
                 Icon(
                     painter = painterResource(R.drawable.restock_icon),
                     contentDescription = "restock",
-                    modifier.size(11.dp)
+                    modifier
+                        .size(11.dp)
+                        .offset(0.dp, 2.dp)
                 )
+                Spacer(modifier = Modifier.width(70.dp))
                 Text(
                     text = "Restock",
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = Color(0xFF2B2B85),
+                    modifier=(Modifier.offset((-70).dp))
                 )
             }
 
             Text(
                 text = "update your supply as you buy",
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primaryContainer,
-                modifier = modifier.padding(top = 16.dp, start = 10.dp)
+                color = Color(0xFF000000),
+                modifier = modifier
+                    .padding(top = 16.dp, start = 5.dp)
+                    .size(500.dp),
+                fontSize = 9.sp
             )
 
             Text(
                 text = "Inventory",
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = Color(0xFF2B2B85),
                 modifier = modifier.padding(top = 15.dp, start = 8.dp)
             )
         }
@@ -187,21 +422,26 @@ fun AnalyticsLinkCard(modifier: Modifier) {
             .height(108.dp)
             .clickable {}, //TODO
         shape = MaterialTheme.shapes.small,
-        colors = CardDefaults.elevatedCardColors(containerColor = MaterialTheme.colorScheme.tertiary)
+        colors = CardDefaults.elevatedCardColors(Color(0xFFF5F5F5))
     ) {
         Column(modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
-            Row(modifier.padding(top = 10.dp) .fillMaxWidth(),
+            Row(
+                modifier
+                    .padding(top = 10.dp)
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Start
             ) {
                 Icon(
                     painter = painterResource(R.drawable.metrics_icon),
                     contentDescription = "metrics",
-                    modifier.size(11.dp)
+                    modifier.size(11.dp).offset(0.dp, 2.dp)
                 )
+                Spacer(modifier = Modifier.width(120.dp))
                 Text(
                     text = "Metrics",
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onTertiary
+                    color = Color(0xFF2B2B85),
+                    modifier=(Modifier.offset((-120).dp))
                 )
             }
 
@@ -209,192 +449,21 @@ fun AnalyticsLinkCard(modifier: Modifier) {
                 painter = painterResource(R.drawable.metrics_demo_icon),
                 contentDescription = "metrics",
                 modifier = modifier
-                    .padding(top = 11.dp, start = 60.dp)
-                    .size(35.dp)
+                    /*.padding(top = 11.dp, start = 60.dp)*/
+                    .size(500.dp).height(120.dp)
             )
 
             Text(
                 text = "Analytics",
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onTertiary,
+                color = Color(0xFF2B2B85),
                 modifier = modifier.padding(top = 15.dp, start = 8.dp)
             )
         }
     }
 }
 
-@Composable
-fun AccountCards() {
-    Row {
-        SalesCard(Modifier.weight(1f))
-
-        Spacer(modifier = Modifier.width(4.dp))
-
-        ProfitCard(Modifier.weight(1f))
-
-        Spacer(modifier = Modifier.width(4.dp))
-
-        ProductsCard(Modifier.weight(1f))
-    }
-}
-
-@Composable
-fun SalesCard(modifier: Modifier) {
-    ElevatedCard(
-        modifier.height(80.dp),
-        shape = MaterialTheme.shapes.small,
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.primary
-        )
-    )
-    {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Text(
-                text = "Sales",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primaryContainer,
-                modifier = Modifier.padding(top = 8.dp, start = 8.dp)
-            )
-
-            Icon(
-                //Icons.Filled.Visibility,
-                painter = painterResource(R.drawable.eye_icon),
-                contentDescription = "hide icon",
-                modifier = Modifier.padding(top = 13.dp, start = 62.dp, end = 8.dp)
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        )
-        {
-            Icon(
-                painter = painterResource(R.drawable.naira_icon),
-                contentDescription = "naira icon",
-                modifier = Modifier.padding(top = 5.2.dp)
-            )
-            Spacer(modifier = Modifier.width(2.dp))
-
-            Text(
-                text = "2000", //TODO
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primaryContainer,
-            )
-        }
-
-    }
-}
-
-@Composable
-fun ProfitCard(modifier: Modifier) {
-    ElevatedCard(
-        modifier.height(80.dp),
-        shape = MaterialTheme.shapes.small,
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.primary
-        )
-    )
-    {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Text(
-                text = "Profit",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primaryContainer,
-                modifier = Modifier.padding(top = 8.dp, start = 8.dp)
-            )
-
-            Icon(
-                //Icons.Filled.Visibility,
-                painter = painterResource(R.drawable.eye_icon),
-                contentDescription = "hide icon",
-                modifier = Modifier.padding(top = 13.dp, start = 62.dp, end = 8.dp)
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        )
-        {
-            Icon(
-                painter = painterResource(R.drawable.naira_icon),
-                contentDescription = "naira icon",
-                modifier = Modifier.padding(top = 5.2.dp)
-            )
-            Spacer(modifier = Modifier.width(2.dp))
-
-            Text(
-                text = "2000", //TODO
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primaryContainer,
-            )
-        }
-
-    }
-}
-
-@Composable
-fun ProductsCard(modifier: Modifier) {
-    ElevatedCard(
-        modifier.height(80.dp),
-        shape = MaterialTheme.shapes.small,
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer
-        )
-    )
-    {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Text(
-                text = "Products",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primaryContainer,
-                modifier = Modifier.padding(top = 8.dp, start = 8.dp)
-            )
-
-            Icon(
-                //Icons.Filled.Visibility,
-                painter = painterResource(R.drawable.eye_icon),
-                contentDescription = "hide icon",
-                modifier = Modifier.padding(top = 13.dp, start = 47.dp, end = 8.dp)
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        )
-        {
-            Text(
-                text = "200", //TODO
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primaryContainer,
-            )
-        }
-
-    }
-}
-
-
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CurrentDatePreview() {
     //DashboardBody()
