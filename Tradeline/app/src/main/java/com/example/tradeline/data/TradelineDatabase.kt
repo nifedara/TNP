@@ -6,12 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [User::class, Product::class], version = 7, exportSchema = false)
+@Database(entities = [User::class, Product::class, Transaction::class], version = 9, exportSchema = false)
 abstract class TradelineDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
     abstract fun productDao(): ProductDao
-    //abstract fun transactionDao(): TransactionDao
+    abstract fun transactionDao(): TransactionDao
 
     companion object {
         @Volatile
@@ -22,7 +22,6 @@ abstract class TradelineDatabase : RoomDatabase() {
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(context, TradelineDatabase::class.java, "app_database")
                     .fallbackToDestructiveMigration()
-                    //.addMigrations(Migration1To2)
                     .build()
                     .also { Instance = it }
             }

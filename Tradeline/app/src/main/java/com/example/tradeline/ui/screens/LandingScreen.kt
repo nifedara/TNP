@@ -33,7 +33,7 @@ fun InventoryScreen(
     navigateToProductDetails: (Int) -> Unit,
     canNavigateBack: Boolean = false,
     modifier: Modifier = Modifier,
-    viewModel: InventoryLandingViewModel = viewModel(factory = AppViewModelProvider.createFactory(userId))
+    viewModel: InventoryLandingViewModel = viewModel(factory = AppViewModelProvider.createFactory(userId = userId))
 ){
 
     val homeUiState by viewModel.homeUiState.collectAsState()

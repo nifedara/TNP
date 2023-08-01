@@ -27,7 +27,7 @@ object Login : NavigationDestination {
 fun LoginScreen(
     navigateBack: () -> Unit,
     canNavigateBack: Boolean = true,
-    onLogin: (Int) -> Unit, // Modified onLogin callback to pass the userId
+    onLogin: (Int, String) -> Unit, // Modified onLogin callback to pass the userId and store name
     navigateToStoreCreation: () -> Unit,
     navigateToForgotPassword: () -> Unit,
     viewModel: LoginScreenViewModel = viewModel(factory = AppViewModelProvider.createFactory())
@@ -37,6 +37,7 @@ fun LoginScreen(
 
 
     val loggedUserId = viewModel.userId
+    val loggedStore = viewModel.storeName
 
     var storeName by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -109,18 +110,18 @@ fun LoginScreen(
                     onClick = {
                         coroutineScope.launch {
                             viewModel.login(storeName, password)
-                            loggedUserId?.let { onLogin(it) }
+                            loggedUserId?.let {
+                                loggedStore?.let { onLogin(loggedUserId, loggedStore) }
+                            }
                         }
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp),
+                    modifier = Modifier.fillMaxWidth().height(50.dp),
                     shape = MaterialTheme.shapes.large,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         contentColor = MaterialTheme.colorScheme.primary
                     ),
-                    enabled = true //TODO
+                    enabled = true
                 ) {
                     Text(stringResource(R.string.log_in))
                 }

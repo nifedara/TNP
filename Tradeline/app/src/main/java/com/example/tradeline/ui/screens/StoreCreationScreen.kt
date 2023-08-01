@@ -25,16 +25,16 @@ object CreateStore : NavigationDestination {
 //The store creation screen. Has the form fields to collect sign up data
 @Composable
 fun StoreCreationScreen(
-    onSubmit: (Int) -> Unit,
+    onSubmit: (Int, String) -> Unit,
     navigateToLogin: () -> Unit,
     navigateBack: () -> Unit,
     canNavigateBack: Boolean = true,
     viewModel: StoreCreationScreenViewModel = viewModel(factory = AppViewModelProvider.createFactory())
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val loggedInUser = viewModel.currentUser
 
     val loggedUserId = viewModel.userId
+    val loggedStore = viewModel.storeName
 
     var storeName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -134,17 +134,14 @@ fun StoreCreationScreen(
                                 password,
                                 confirmPassword
                             )
-                            //onSubmit(loggedUserId!!)
-                            loggedUserId?.let { onSubmit(it) }
-                            //onSubmit(loggedInUser.value!!.id!!)
-//                            loggedInUser.value?.let { user ->
-//                                user.id?.let { onSubmit(it) }
-//                            }
+                            loggedUserId?.let {
+                                loggedStore?.let {
+                                    onSubmit(loggedUserId, loggedStore)
+                                }
+                            }
                         }
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp),
+                    modifier = Modifier.fillMaxWidth().height(50.dp),
                     shape = MaterialTheme.shapes.large,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.onPrimaryContainer,

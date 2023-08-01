@@ -15,19 +15,22 @@ fun RootNavigationGraph(navController: NavHostController) {
         startDestination = Graph.ONBOARDING
     ) {
         onboardingNavGraph(navController = navController)
-        composable(route = "${Graph.HOME}/{userId}") {
+        composable(route = "${Graph.HOME}/{userId}/{storeName}") { //
             val userId = remember { it.arguments?.getString("userId")?.toIntOrNull() }
-            if (userId != null) {
-                TradelineApp(userId = userId)
+            val storeName = remember { it.arguments?.getString("storeName") }
+
+            if (userId != null && storeName != null) {
+                TradelineApp(userId = userId, storeName = storeName)
             }
         }
+
     }
 }
 
 object Graph {
     const val ROOT = "root_graph"
     const val ONBOARDING = "onboarding_graph"
-    const val HOME = "home_graph/{userId}"
+    const val HOME = "home_graph/{userId}/{storeName}"
     const val TRADELINE = "tradeline_graph/{userId}"
 }
 

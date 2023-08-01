@@ -20,9 +20,11 @@ import java.util.*
 
 @Composable
 fun DashboardScreen(
+    storeName: String, // store name
     navigateToProfile: () -> Unit,
     navigateToRestock: () -> Unit,
     navigateToAnalytics: () -> Unit,
+
 ) {
     Scaffold(
         topBar = {

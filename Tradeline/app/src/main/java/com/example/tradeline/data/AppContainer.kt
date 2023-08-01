@@ -9,6 +9,8 @@ interface AppContainer {
     val usersRepository: UsersRepository
 
     val productsRepository: ProductsRepository
+
+    val transactionsRepository: TransactionsRepository
 }
 
 class AppDataContainer(private val context: Context) : AppContainer {
@@ -21,5 +23,10 @@ class AppDataContainer(private val context: Context) : AppContainer {
     //Implementation for ProductsRepository
     override val productsRepository: ProductsRepository by lazy {
         OfflineProductsRepositories(TradelineDatabase.getDatabase(context).productDao())
+    }
+
+    //Implementation for TransactionsRepository
+    override val transactionsRepository: TransactionsRepository by lazy {
+        OfflineTransactionsRepositories(TradelineDatabase.getDatabase(context).transactionDao())
     }
 }

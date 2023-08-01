@@ -15,6 +15,7 @@ class LoginScreenViewModel(private val usersRepository: UsersRepository) : ViewM
 
     private val currentUser = MutableStateFlow<User?>(null)
     var userId : Int? = null
+    var storeName : String? = null
 
 
     val loginState = mutableStateOf(LoginState())
@@ -36,6 +37,7 @@ class LoginScreenViewModel(private val usersRepository: UsersRepository) : ViewM
     private fun setCurrentUser(user: User){
         currentUser.value = user
         userId = user.id
+        storeName = user.storeName
     }
 
 

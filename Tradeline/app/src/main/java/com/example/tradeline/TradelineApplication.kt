@@ -16,37 +16,3 @@ class TradelineApplication : Application() {
         AppViewModelProvider.initialize(this)
     }
 }
-
-
-//class TradelineApplication : Application() {
-//
-//    /**
-//     * AppContainer instance used by the rest of the classes to obtain dependencies
-//     */
-//    lateinit var container: AppContainer
-//
-//    override fun onCreate() {
-//        super.onCreate()
-//        container = AppDataContainer()
-//    }
-//
-//    companion object {
-//        private lateinit var instance: TradelineApplication
-//
-//        fun getInstance(): TradelineApplication {
-//            return instance
-//        }
-//    }
-//}
-
-//class TradelineApplication : Application() {
-//
-//    /**
-//     * AppContainer instance used by the rest of classes to obtain dependencies
-//     */
-//    lateinit var container: AppContainer
-//    override fun onCreate() {
-//        super.onCreate()
-//        container = AppDataContainer(this)
-//    }
-//}

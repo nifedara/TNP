@@ -16,7 +16,9 @@ import com.example.tradeline.R
 import com.example.tradeline.TopBar
 import com.example.tradeline.ui.AppViewModelProvider
 import com.example.tradeline.ui.navigation.NavigationDestination
+import com.example.tradeline.ui.screens.viewModel.ProductDetails
 import com.example.tradeline.ui.screens.viewModel.ProductDetailsScreenViewModel
+import kotlinx.coroutines.launch
 
 object ProductDetails : NavigationDestination {
     override val route = "product_details"
@@ -27,10 +29,15 @@ fun InventoryProductDetailsScreen(
     itemId: Int, // Add the itemId parameter
     navigateBack: () -> Unit,
     canNavigateBack: Boolean = true,
-    viewModel: ProductDetailsScreenViewModel = viewModel(factory = AppViewModelProvider.createFactory(itemId))
+    viewModel: ProductDetailsScreenViewModel = viewModel(factory = AppViewModelProvider.createFactory(itemId = itemId))
 ){
     val detailsUiState = viewModel.detailsUiState.collectAsState()
     val detail = detailsUiState.value.itemDetails
+
+    val coroutineScope = rememberCoroutineScope()
+
+    var productName by rememberSaveable { mutableStateOf("") }
+    var description by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -41,7 +48,8 @@ fun InventoryProductDetailsScreen(
         }
     ){
         Column(
-            modifier = Modifier.fillMaxWidth().padding(24.dp)
+            modifier = Modifier.fillMaxWidth().padding(24.dp),
+            verticalArrangement = Arrangement.Center //just added
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth().offset(0.dp, 0.dp),
@@ -51,14 +59,13 @@ fun InventoryProductDetailsScreen(
                     text = "Product Details",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color(0xFF2B2B85),
-                    modifier = Modifier.offset(0.dp, 15.dp),
+                    modifier = Modifier.offset(0.dp, 50.dp),
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
             }
-            Row(modifier = Modifier.fillMaxWidth().offset(0.dp, 40.dp)){
+            Row(modifier = Modifier.fillMaxWidth().offset(0.dp, 70.dp)){
 
-                //ProductName(Modifier.weight(1f).offset(0.dp, 15.dp) )
                 Column(
                     Modifier.fillMaxWidth().weight(1f).offset(0.dp, 15.dp)) {
                     Row(modifier = Modifier.fillMaxWidth()) {
@@ -71,13 +78,14 @@ fun InventoryProductDetailsScreen(
                     }
                 }
                 Spacer(modifier = Modifier.width(5.dp) )
-                //ProductNameDetails(Modifier.weight(2f))
-                Column(Modifier.weight(2f).fillMaxWidth()) {
+
+                Column(
+                    Modifier.weight(2f).fillMaxWidth()) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         OutlinedTextField(
                             value = detail.name,
                             onValueChange = {detail.name = it},
-                            modifier = Modifier.width(200.dp).height(40.dp).offset(10.dp, 10.dp),
+                            modifier = Modifier.width(200.dp).height(50.dp).offset(10.dp, 10.dp),
                             shape = MaterialTheme.shapes.large,
                             enabled = false,
                             singleLine = true)
@@ -85,9 +93,10 @@ fun InventoryProductDetailsScreen(
                 }
             }
 
-            Row(modifier = Modifier.fillMaxWidth().offset(0.dp, 80.dp)){
-                //ProductPrice(Modifier.weight(1f).offset(0.dp, 15.dp) )
-                Column(Modifier.fillMaxWidth().weight(1f).offset(0.dp, 15.dp)) {
+            Row(modifier = Modifier.fillMaxWidth().offset(0.dp, 100.dp)){
+                Column(
+                    Modifier
+                        .fillMaxWidth().weight(1f).offset(0.dp, 15.dp)) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Text(
                             text = "Selling Price",
@@ -98,13 +107,14 @@ fun InventoryProductDetailsScreen(
                     }
                 }
                 Spacer(modifier = Modifier.width(5.dp) )
-                //ProductPriceDetails(Modifier.weight(2f))
-                Column(Modifier.fillMaxWidth().weight(2f)) {
+
+                Column(
+                    Modifier.fillMaxWidth().weight(2f)) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         OutlinedTextField(
                             value = detail.sellingPrice,
                             onValueChange = {},
-                            modifier = Modifier.width(200.dp).height(40.dp).offset(10.dp, 10.dp),
+                            modifier = Modifier.width(200.dp).height(50.dp).offset(10.dp, 10.dp),
                             shape = MaterialTheme.shapes.large,
                             enabled = false,
                             singleLine = true,
@@ -120,8 +130,7 @@ fun InventoryProductDetailsScreen(
                 }
             }
 
-            Row(modifier = Modifier.fillMaxWidth().offset(0.dp, 120.dp)){
-                //ProductDescription(Modifier.weight(1f).offset(0.dp, 15.dp))
+            Row(modifier = Modifier.fillMaxWidth().offset(0.dp, 140.dp)){
                 Column(
                     Modifier.fillMaxWidth().weight(1f).offset(0.dp, 15.dp)) {
                     Row(modifier = Modifier.fillMaxWidth()) {
@@ -134,8 +143,9 @@ fun InventoryProductDetailsScreen(
                     }
                 }
                 Spacer(modifier = Modifier.width(5.dp) )
-                //ProductDescriptionDetails(Modifier.weight(2f))
-                Column(Modifier.fillMaxWidth().weight(2f)) {
+
+                Column(
+                    Modifier.fillMaxWidth().weight(2f)) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         OutlinedTextField(
                             value = detail.description,
@@ -148,16 +158,16 @@ fun InventoryProductDetailsScreen(
                 }
             }
 
-            Row(modifier = Modifier.fillMaxWidth().offset(0.dp, 180.dp),
+            Row(modifier = Modifier.fillMaxWidth().offset(0.dp, 200.dp),
                 horizontalArrangement = Arrangement.Center){
 
                 var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
+                var editDialogRequested by rememberSaveable { mutableStateOf(false) }
 
-                //DeleteButton(Modifier.weight(2f).offset(0.dp, 15.dp) )
-                Column(Modifier.fillMaxWidth().weight(2f).offset(0.dp, 15.dp)) {
+                Column(
+                    Modifier.fillMaxWidth().weight(2f).offset(0.dp, 15.dp)) {
                     Row(modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center) {
-
                         Button(
                             onClick = { deleteConfirmationRequired = true },
                             modifier = Modifier.width(120.dp).height(50.dp),
@@ -165,38 +175,53 @@ fun InventoryProductDetailsScreen(
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFFFFFFFF),
                                 contentColor = Color(0xFFE36161)),
-                            enabled = true //TODO
+                            enabled = true
                         )
                         {Text( text = "DELETE")}
                     }
                 }
                 Spacer(modifier = Modifier.width(5.dp) )
-                //EditButton(Modifier.weight(2f).offset(0.dp, 15.dp))
-                Column(Modifier.fillMaxWidth().weight(2f).offset(0.dp, 15.dp)) {
+
+                Column(
+                    Modifier.fillMaxWidth().weight(2f).offset(0.dp, 15.dp)) {
                     Row(modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center) {
 
-                        Button(onClick = { /*TODO*/ },
+                        Button(onClick = { editDialogRequested = true },
                             modifier = Modifier.width(120.dp).height(50.dp),
                             shape = MaterialTheme.shapes.large,
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
                                 contentColor = Color(0xFFFFFFFF)),
-                            enabled = true //TODO
-                        )
-                        {Text( text = "EDIT")}
+                            enabled = true
+                        ){Text( text = "EDIT")}
                     }
                     if (deleteConfirmationRequired) {
                         DeleteConfirmationDialog(
                             onDeleteConfirm = {
                                 deleteConfirmationRequired = false
-                                //onDelete()
+                                coroutineScope.launch {
+                                    viewModel.deleteProduct()
+                                    navigateBack()
+                                }
                             },
                             onDeleteCancel = { deleteConfirmationRequired = false }
                         )
                     }
-                }
+                    if (editDialogRequested) {
 
+                        EditBottomSheet(detail = detail,
+                        ) { updatedProductName, updatedDescription ->
+                            coroutineScope.launch {
+                                productName = updatedProductName // Update mutable state variables
+                                description = updatedDescription
+
+                                viewModel.updateProduct(updatedProductName = productName, updatedDescription = description)
+                                navigateBack()
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -215,8 +240,7 @@ private fun DeleteConfirmationDialog(
         modifier = modifier.padding(16.dp),
         dismissButton = {
             TextButton(onClick = onDeleteCancel) {
-                androidx.compose.material.Text(text = "No")
-            }
+                Text(text = "No") }
         },
         confirmButton = {
             TextButton(onClick = onDeleteConfirm) {
@@ -224,6 +248,41 @@ private fun DeleteConfirmationDialog(
             }
         }
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun EditBottomSheet(
+    detail: ProductDetails,
+    onEditClick: (updatedProductName: String, updatedDescription: String) -> Unit,
+){
+
+    var productName by rememberSaveable { mutableStateOf(detail.name) }
+    var description by rememberSaveable { mutableStateOf(detail.description) }
+
+    ModalBottomSheet(
+        onDismissRequest = { /* Do nothing */ })
+    {
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(24.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(text = "Product Name")
+            Spacer(modifier = Modifier.height(2.dp))
+            OutlinedTextField(value = productName, onValueChange = {productName = it}, enabled = true, modifier = Modifier.fillMaxWidth())
+            
+            Spacer(modifier = Modifier.height(10.dp))
+            
+            Text(text = "Description")
+            Spacer(modifier = Modifier.height(2.dp))
+            OutlinedTextField(value = description, onValueChange = {description = it}, enabled = true, modifier = Modifier.fillMaxWidth())
+
+            Spacer(modifier = Modifier.height(20.dp))
+            Button(onClick = { onEditClick(productName, description) }, modifier = Modifier.fillMaxWidth()) {
+                Text(text = "EDIT")
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true, showSystemUi = true)

@@ -14,12 +14,13 @@ object AppViewModelProvider {
         this.application = application
     }
 
-    fun createFactory(userId: Int? = null, itemId: Int? = null): ViewModelProvider.Factory {
+    fun createFactory(userId: Int? = null, itemId: Int? = null, storeName: String? = null): ViewModelProvider.Factory {
         return object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
                 val usersRepository = application.container.usersRepository
                 val productsRepository = application.container.productsRepository
+                val transactionsRepository = application.container.transactionsRepository
 
                 if (modelClass.isAssignableFrom(StoreCreationScreenViewModel::class.java)) {
                     return StoreCreationScreenViewModel(usersRepository) as T
@@ -39,6 +40,18 @@ object AppViewModelProvider {
 
                 if (modelClass.isAssignableFrom(ProductDetailsScreenViewModel::class.java)) {
                     return ProductDetailsScreenViewModel(productsRepository, itemId ?: 0) as T
+                }
+
+                if (modelClass.isAssignableFrom(AccountScreenViewModel::class.java)) {
+                    return AccountScreenViewModel(usersRepository, storeName ?: "") as T
+                }
+
+                if (modelClass.isAssignableFrom(RestockViewModel::class.java)) {
+                    return RestockViewModel(productsRepository, userId ?: 0) as T
+                }
+
+                if (modelClass.isAssignableFrom(SalesViewModel::class.java)) {
+                    return SalesViewModel(transactionsRepository, userId ?: 0) as T
                 }
 
                 throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

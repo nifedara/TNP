@@ -21,12 +21,12 @@ import com.example.tradeline.ui.navigation.BottomNavRoute
  * Top level composable that represents screens for the application.
  */
 @Composable
-fun TradelineApp(userId: Int) {
+fun TradelineApp(userId: Int, storeName: String) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomBar(navController = navController) }
     ) {
-        BottomNavGraph(navController = navController, userId)
+        BottomNavGraph(navController = navController, userId, storeName)
     }
 }
 

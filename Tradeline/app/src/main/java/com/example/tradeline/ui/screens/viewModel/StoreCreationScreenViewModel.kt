@@ -11,6 +11,7 @@ class StoreCreationScreenViewModel(private val usersRepository: UsersRepository)
 
     val currentUser = MutableStateFlow<User?>(null)
     var userId : Int? = null
+    var storeName : String? = null
 
     suspend fun createNewStore(storeName: String, email: String, phoneNumber: String, password: String, confirmPassword: String) {
         if (password == confirmPassword) {
@@ -25,6 +26,7 @@ class StoreCreationScreenViewModel(private val usersRepository: UsersRepository)
     private  fun setCurrentUser(user: User){
         currentUser.value = user
         userId = user.id
+        storeName = user.storeName
     }
 
 }
