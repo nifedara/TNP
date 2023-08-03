@@ -243,7 +243,7 @@ fun InventoryRestockProductScreen(
 }
 
 @Composable
-fun ProductDropdown(options: List<String>, onProductSelected: (String) -> Unit) {
+fun ProductDropdown(modifier: Modifier = Modifier, options: List<String>, onProductSelected: (String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     var selectedOption by rememberSaveable { mutableStateOf(options.firstOrNull()) }
 
@@ -251,7 +251,7 @@ fun ProductDropdown(options: List<String>, onProductSelected: (String) -> Unit) 
         onClick = { expanded = true },
         //modifier = Modifier.offset(10.dp, 40.dp)
         modifier = Modifier
-            .width(310.dp)
+            .fillMaxWidth()
             .height(50.dp)
             .offset(10.dp, 70.dp)
     ) {

@@ -31,6 +31,6 @@ data class Transaction(
     val date: String,
     val product: String,
     val quantity: Int,
-    val price: Int,
+    val price: Double,
     val userId: Int? = null
 )

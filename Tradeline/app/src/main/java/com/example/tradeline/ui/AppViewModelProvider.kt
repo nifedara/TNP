@@ -51,7 +51,7 @@ object AppViewModelProvider {
                 }
 
                 if (modelClass.isAssignableFrom(SalesViewModel::class.java)) {
-                    return SalesViewModel(transactionsRepository, userId ?: 0) as T
+                    return SalesViewModel(transactionsRepository = transactionsRepository, productsRepository = productsRepository, userId ?: 0) as T
                 }
 
                 throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
