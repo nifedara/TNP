@@ -1,4 +1,4 @@
-package com.example.tradeline.data
+package com.example.tradeline.ui.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -34,3 +34,4 @@ data class Transaction(
     val price: Double,
     val userId: Int? = null
 )
+

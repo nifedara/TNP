@@ -21,11 +21,11 @@ fun NavGraphBuilder.onboardingNavGraph(navController: NavHostController) {
             StoreCreationScreen(
                 navigateBack = { navController.popBackStack() },
                 navigateToLogin = { navController.navigate(Login.route) },
-                onSubmit = {
-                    loggedUserId, loggedStore ->
-                    val destinationRoute = "${Graph.HOME}/$loggedUserId/$loggedStore"
-                    navController.navigate(destinationRoute)
-                }
+//                onSubmit = {
+//                    loggedUserId, loggedStore ->
+//                    val destinationRoute = "${Graph.HOME}/$loggedUserId/$loggedStore"
+//                    navController.navigate(destinationRoute)
+//                }
             )
         }
         composable(route = Login.route) {

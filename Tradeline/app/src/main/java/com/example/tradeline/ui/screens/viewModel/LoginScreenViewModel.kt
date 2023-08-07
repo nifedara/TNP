@@ -3,8 +3,8 @@ package com.example.tradeline.ui.screens.viewModel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tradeline.data.User
-import com.example.tradeline.data.UsersRepository
+import com.example.tradeline.ui.data.User
+import com.example.tradeline.ui.data.UsersRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -40,7 +40,6 @@ class LoginScreenViewModel(private val usersRepository: UsersRepository) : ViewM
         storeName = user.storeName
     }
 
-
     private fun handleSuccessfulLogin() {
         loginState.value = LoginState(successfulLogin = true)
     }
@@ -53,5 +52,4 @@ class LoginScreenViewModel(private val usersRepository: UsersRepository) : ViewM
 data class LoginState(
     val successfulLogin: Boolean = false,
     val invalidCredentials: Boolean = false,
-    //val userId: Int? = null
 )

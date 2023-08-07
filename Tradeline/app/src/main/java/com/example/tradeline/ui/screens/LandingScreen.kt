@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tradeline.R
 import com.example.tradeline.TopBar
-import com.example.tradeline.data.Product
 import com.example.tradeline.ui.AppViewModelProvider
+import com.example.tradeline.ui.data.Product
 import com.example.tradeline.ui.screens.viewModel.InventoryLandingViewModel
 
 @Composable

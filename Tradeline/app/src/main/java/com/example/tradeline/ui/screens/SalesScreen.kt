@@ -21,13 +21,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tradeline.R
 import com.example.tradeline.TopBar
-import com.example.tradeline.data.Product
-import com.example.tradeline.data.Transaction
+import com.example.tradeline.ui.data.Product
+import com.example.tradeline.ui.data.Transaction
 import com.example.tradeline.ui.AppViewModelProvider
 import com.example.tradeline.ui.screens.viewModel.SalesViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
@@ -90,7 +90,7 @@ fun SalesScreen(
             SalesBody(itemList = salesUiState.itemList)
 
             if (salesDialogRequested) {
-                SalesBottomSheet(navigateBack = navigateBack,
+                SalesBottomSheet(onSalesSheetCancel = {salesDialogRequested = false},
                     coroutine = coroutine,
                     viewModel = viewModel,
                     userId = userId,
@@ -215,34 +215,41 @@ fun Transaction(item: Transaction, modifier: Modifier = Modifier){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SalesBottomSheet(navigateBack: () -> Unit, options: List<String>, productInfo: Product?,
+private fun SalesBottomSheet(onSalesSheetCancel: () -> Unit, options: List<String>, productInfo: Product?,
                              viewModel: SalesViewModel,
                              coroutine: CoroutineScope,
                              userId: Int,
                              selectedProductName: String,
                              onProductSelected: (String) -> Unit){
 
+    //val recordSaleState = viewModel.recordSalesState.value
+    var showError by remember { mutableStateOf(false) }
+
     // Mutable state for the input fields
     var quantity by rememberSaveable { mutableStateOf(productInfo?.quantity.toString()) }
     var sellingPrice by rememberSaveable { mutableStateOf(productInfo?.sellingPrice.toString()) }
+    var calculatedPrice by rememberSaveable { mutableStateOf("") }
 
-    val currentDate = DateFormat.getDateInstance().format(Date()).toString()
+    //val currentDate = DateFormat.getDateInstance().format(Date()).toString()
+    val currentDate = SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(Date())
 
     LaunchedEffect(productInfo) {
         productInfo?.let {
             quantity = it.quantity.toString()
-            sellingPrice = (it.sellingPrice * quantity.toDouble()).toString()
+            sellingPrice = it.sellingPrice.toString()
         }
     }
 
     ModalBottomSheet(
-        onDismissRequest = { navigateBack() })
+        onDismissRequest = { onSalesSheetCancel() })
     {
         Column(modifier = Modifier
             .fillMaxWidth()
             .padding(24.dp),
             verticalArrangement = Arrangement.Center
         ) {
+            // Show error message if quantity is 0 or more than the available quantity
+            if (showError) { Text( text = "Enter a valid amount", color = Color.Red) }
 
             Text(text = "Product Name")
             Spacer(modifier = Modifier.height(0.dp))
@@ -250,15 +257,26 @@ private fun SalesBottomSheet(navigateBack: () -> Unit, options: List<String>, pr
 
             Spacer(modifier = Modifier.height(90.dp))
 
-            Text(text = "Quantity", color = Color(0xFF2B2B85))
+            if (showError) { Text(text = "Quantity", color = Color(0xFFE36161)) } else
+            { Text(text = "Quantity", color = Color(0xFF2B2B85)) }
+
             Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField( value = quantity, onValueChange = { quantity=it }, modifier = Modifier.height(50.dp).fillMaxWidth(), enabled = true)
+
+            OutlinedTextField( value = quantity,
+                onValueChange = { newQuantity ->
+                quantity = newQuantity
+                calculatedPrice = if (newQuantity.isEmpty() || sellingPrice.isEmpty()) {
+                    ""
+                } else {
+                    ((sellingPrice.toDoubleOrNull() ?: 0.0) * (newQuantity.toIntOrNull() ?: 0)).toString()}
+                },
+                modifier = Modifier.height(50.dp).fillMaxWidth(), enabled = true)
 
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(text = "Amount", color = Color(0xFF2B2B85))
             Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField( value = sellingPrice, onValueChange = { sellingPrice = it }, modifier = Modifier.fillMaxWidth().height(50.dp),
+            OutlinedTextField( value = calculatedPrice, onValueChange = { }, modifier = Modifier.fillMaxWidth().height(50.dp),
                 enabled = false,
                 leadingIcon = { Icon(
                     painter = painterResource(R.drawable.naira_icon),
@@ -269,13 +287,24 @@ private fun SalesBottomSheet(navigateBack: () -> Unit, options: List<String>, pr
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(onClick = { coroutine.launch {
-                viewModel.updateProduct(updatedQuantity = quantity.toIntOrNull() ?: 0)
-                viewModel.insertTransaction(date = currentDate, product = selectedProductName, quantity = quantity.toIntOrNull() ?: 0,
-                    price = sellingPrice.toDoubleOrNull() ?: 0.0, userId = userId)
+                val quantityInt = quantity.toIntOrNull()
+                val sellingPriceDouble = sellingPrice.toDoubleOrNull()
+
+                if (quantityInt == null || sellingPriceDouble == null) { //Show error message for invalid input
+                    showError = true
+                } else if (quantityInt <= 0 || quantityInt > (productInfo?.quantity ?: 0)) { //Show error message if quantity is 0 or more than available quantity
+                    showError = true
+                } else {
+                    viewModel.updateProductInsertTransaction(date = currentDate, product = selectedProductName, quantity = quantity.toIntOrNull() ?: 0,
+                        price = calculatedPrice.toDoubleOrNull() ?: 0.0, userId = userId)
+                    onSalesSheetCancel()
+                }
             } },
                 modifier = Modifier.fillMaxWidth()) {
                 Text(text = "SUBMIT")
+
             }
+
         }
     }
 }

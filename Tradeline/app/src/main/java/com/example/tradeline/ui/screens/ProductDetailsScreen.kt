@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,6 +34,7 @@ fun InventoryProductDetailsScreen(
 ){
     val detailsUiState = viewModel.detailsUiState.collectAsState()
     val detail = detailsUiState.value.itemDetails
+    val outOfStock = detailsUiState.value.outOfStock
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -68,6 +70,7 @@ fun InventoryProductDetailsScreen(
 
                 Column(
                     Modifier.fillMaxWidth().weight(1f).offset(0.dp, 15.dp)) {
+                    if (outOfStock) {Text( text = "Out of Stock", color = Color.Red, textAlign = TextAlign.Center)}
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Text(
                             text = "Product Name",
@@ -209,8 +212,8 @@ fun InventoryProductDetailsScreen(
                         )
                     }
                     if (editDialogRequested) {
-
                         EditBottomSheet(detail = detail,
+                            onEditCancel  = {editDialogRequested = false}
                         ) { updatedProductName, updatedDescription ->
                             coroutineScope.launch {
                                 productName = updatedProductName // Update mutable state variables
@@ -234,17 +237,17 @@ private fun DeleteConfirmationDialog(
     modifier: Modifier = Modifier
 ) {
     AlertDialog(
-        onDismissRequest = { /* Do nothing */ },
+        onDismissRequest = { onDeleteCancel() },
         title = { Text("???") },
         text = { Text("Are you sure you want to delete?") },
         modifier = modifier.padding(16.dp),
         dismissButton = {
             TextButton(onClick = onDeleteCancel) {
-                Text(text = "No") }
+                Text(text = "No", color = Color(0xFF22226A)) }
         },
         confirmButton = {
             TextButton(onClick = onDeleteConfirm) {
-                Text(text = "Yes")
+                Text(text = "Yes", color = Color(0xFFE36161))
             }
         }
     )
@@ -254,6 +257,7 @@ private fun DeleteConfirmationDialog(
 @Composable
 private fun EditBottomSheet(
     detail: ProductDetails,
+    onEditCancel: () -> Unit,
     onEditClick: (updatedProductName: String, updatedDescription: String) -> Unit,
 ){
 
@@ -261,7 +265,7 @@ private fun EditBottomSheet(
     var description by rememberSaveable { mutableStateOf(detail.description) }
 
     ModalBottomSheet(
-        onDismissRequest = { /* Do nothing */ })
+        onDismissRequest = { onEditCancel() })
     {
         Column(
             modifier = Modifier.fillMaxWidth().padding(24.dp),

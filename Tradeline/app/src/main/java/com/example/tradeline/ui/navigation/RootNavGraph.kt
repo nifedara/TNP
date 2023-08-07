@@ -15,7 +15,7 @@ fun RootNavigationGraph(navController: NavHostController) {
         startDestination = Graph.ONBOARDING
     ) {
         onboardingNavGraph(navController = navController)
-        composable(route = "${Graph.HOME}/{userId}/{storeName}") { //
+        composable(route = "${Graph.HOME}/{userId}/{storeName}") {
             val userId = remember { it.arguments?.getString("userId")?.toIntOrNull() }
             val storeName = remember { it.arguments?.getString("storeName") }
 

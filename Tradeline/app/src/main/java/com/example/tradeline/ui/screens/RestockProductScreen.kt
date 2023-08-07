@@ -42,8 +42,8 @@ fun InventoryRestockProductScreen(
     // Mutable state for the input fields
     var quantity by rememberSaveable { mutableStateOf(productInfo?.quantity.toString()) }
     var description by rememberSaveable { mutableStateOf(productInfo?.description.orEmpty()) }
-    var costPrice by rememberSaveable { mutableStateOf(productInfo?.costPrice.toString()) }
-    var sellingPrice by rememberSaveable { mutableStateOf(productInfo?.sellingPrice.toString()) }
+    var costPrice by rememberSaveable { mutableStateOf(productInfo?.costPrice.toString().orEmpty()) }
+    var sellingPrice by rememberSaveable { mutableStateOf(productInfo?.sellingPrice.toString().orEmpty()) }
 
     LaunchedEffect(productInfo) {
         productInfo?.let {

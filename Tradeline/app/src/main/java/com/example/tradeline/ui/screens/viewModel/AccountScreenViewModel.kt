@@ -2,14 +2,14 @@ package com.example.tradeline.ui.screens.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tradeline.data.User
-import com.example.tradeline.data.UsersRepository
+import com.example.tradeline.ui.data.User
+import com.example.tradeline.ui.data.UsersRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class AccountScreenViewModel(usersRepository: UsersRepository,storeName: String) : ViewModel()
+class AccountScreenViewModel(usersRepository: UsersRepository, storeName: String) : ViewModel()
 {
     val accountUiState: StateFlow<AccountUiState> =
 

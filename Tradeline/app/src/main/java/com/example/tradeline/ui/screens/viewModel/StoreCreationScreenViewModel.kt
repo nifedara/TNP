@@ -1,56 +1,57 @@
 package com.example.tradeline.ui.screens.viewModel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tradeline.data.User
-import com.example.tradeline.data.UsersRepository
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.example.tradeline.ui.data.User
+import com.example.tradeline.ui.data.UsersRepository
 import kotlinx.coroutines.launch
+
 
 class StoreCreationScreenViewModel(private val usersRepository: UsersRepository) : ViewModel() {
 
-    val currentUser = MutableStateFlow<User?>(null)
-    var userId : Int? = null
-    var storeName : String? = null
+    var storeUiState by mutableStateOf(StoreUiState())
+        private set
 
-    suspend fun createNewStore(storeName: String, email: String, phoneNumber: String, password: String, confirmPassword: String) {
-        if (password == confirmPassword) {
-            viewModelScope.launch {
-                val user = User(storeName = storeName, email = email, phoneNumber = phoneNumber, password = password)
-                usersRepository.insertUser(user)
-                setCurrentUser(user)
-            }
+    fun updateUiState(userDetails: UserFullDetails) {
+        storeUiState =
+            StoreUiState(userDetails = userDetails, isEntryValid = validateInput(userDetails))
+    }
+
+    private fun validateInput(uiState: UserFullDetails = storeUiState.userDetails): Boolean {
+        return with(uiState) {
+            storeName.isNotBlank() && email.isNotBlank() && phoneNumber.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank()
+                    && password == confirmPassword && phoneNumber.length == 11
         }
     }
 
-    private  fun setCurrentUser(user: User){
-        currentUser.value = user
-        userId = user.id
-        storeName = user.storeName
+    suspend fun saveUser() {
+        viewModelScope.launch {
+            if (validateInput()) {
+                usersRepository.insertUser(storeUiState.userDetails.toUser())
+            }
+        }
     }
-
 }
 
-//View Model to validate and insert users in the Room database.
-//class StoreCreationScreenViewModel(private val usersRepository: UsersRepository) : ViewModel() {
-//
-//    suspend fun createNewStore(storeName: String, email: String, phoneNumber: String, password: String, confirmPassword: String) {
-//        if (password == confirmPassword) {
-//            viewModelScope.launch {
-//                val user = User(storeName, email, phoneNumber, password)
-//                usersRepository.insertUser(user)
-////                val existingStore = usersRepository.getUserByStoreName(storeName)
-////                if (existingStore == null) {
-////                    val user = User(storeName, email, phoneNumber, password)
-////                    usersRepository.insertUser(user)
-////                } else{
-////                    //
-////                }
-//
-//                //TODO validation that user is nonexistent, and that all fields are filled
-//            }
-//        }
-//    }
-//}
+data class StoreUiState(
+    val userDetails: UserFullDetails = UserFullDetails(),
+    var isEntryValid: Boolean = false
+)
 
-
+data class UserFullDetails(
+    var storeName: String = "",
+    var email: String = "",
+    var phoneNumber: String = "",
+    var password: String = "",
+    var confirmPassword: String = ""
+) {
+    fun toUser(): User = User(
+        storeName = storeName,
+        email = email,
+        phoneNumber = phoneNumber,
+        password = password
+    )
+}

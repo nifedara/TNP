@@ -4,7 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -13,19 +13,31 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tradeline.R
 import com.example.tradeline.TopBar
+import com.example.tradeline.ui.AppViewModelProvider
+import com.example.tradeline.ui.screens.viewModel.DashboardViewModel
 import java.text.DateFormat.getDateInstance
 import java.util.*
 
 @Composable
 fun DashboardScreen(
+    userId: Int,
     storeName: String, // store name
     navigateToProfile: () -> Unit,
     navigateToRestock: () -> Unit,
     navigateToAnalytics: () -> Unit,
+    viewModel: DashboardViewModel = viewModel(factory = AppViewModelProvider.createFactory(userId = userId))
 
 ) {
+    val totalSalesUiState by viewModel.totalSalesUiState.collectAsState()
+    val totalProductsUiState by viewModel.totalProductsUiState.collectAsState()
+    val totalProfitUiState by viewModel.totalProfitUiState.collectAsState()
+    val sales = totalSalesUiState.sales
+    val products = totalProductsUiState.products
+    val profit = totalProfitUiState.profit
+
     Scaffold(
         topBar = {
             TopBar(
@@ -33,21 +45,23 @@ fun DashboardScreen(
             )
         }
     ) {
-        DashboardBody(navigateToProfile = navigateToProfile, navigateToRestock = navigateToRestock, navigateToAnalytics = navigateToAnalytics)
+        DashboardBody(navigateToProfile = navigateToProfile, navigateToRestock = navigateToRestock, navigateToAnalytics = navigateToAnalytics,
+                storeName = storeName, sales = sales, products = products, profit = profit)
     }
 }
 
 @Composable
-fun DashboardBody(navigateToProfile: () -> Unit, navigateToRestock: () -> Unit, navigateToAnalytics: () -> Unit) {
+fun DashboardBody(navigateToProfile: () -> Unit, navigateToRestock: () -> Unit, navigateToAnalytics: () -> Unit, storeName: String,
+                  sales: Double?, products: Int?, profit: Double?) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(24.dp),
 
     ) {
-        StoreProfile(navigateToProfile = navigateToProfile)
+        StoreProfile(navigateToProfile = navigateToProfile, storeName = storeName)
         CurrentDate()
-        AccountCards()
+        AccountCards(sales, products, profit)
         Text(text = "QUICK LINKS", modifier = Modifier.padding(top = 30.dp))
 
         QuickLinksCard(navigateToRestock = navigateToRestock, navigateToAnalytics = navigateToAnalytics)
@@ -61,18 +75,18 @@ fun DashboardBody(navigateToProfile: () -> Unit, navigateToRestock: () -> Unit, 
 }
 
 @Composable
-fun StoreProfile(navigateToProfile: () -> Unit) {
+fun StoreProfile(navigateToProfile: () -> Unit, storeName: String) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable { navigateToProfile() },
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.End
     )
     {
         Text(
-            text = "Store", //TODO
+            text = storeName,
             style = MaterialTheme.typography.labelMedium,
             color = Color(0xFF000000),
+            modifier = Modifier.clickable { navigateToProfile() },
         )
 
         Image(
@@ -116,22 +130,26 @@ fun CurrentDate() {
 
 
 @Composable
-fun AccountCards() {
+fun AccountCards(sales: Double?, products: Int?, profit: Double?) {
     Row {
-        SalesCard(Modifier.weight(1f))
+        var salesVisible by remember { mutableStateOf(true) }
+        var profitVisible by remember { mutableStateOf(true) }
+        var productsVisible by remember { mutableStateOf(true) }
+
+        SalesCard(sales, Modifier.weight(1f), salesVisible) { salesVisible = !salesVisible }
 
         Spacer(modifier = Modifier.width(4.dp))
 
-        ProfitCard(Modifier.weight(1f))
+        ProfitCard(profit, Modifier.weight(1f), profitVisible) { profitVisible = !profitVisible }
 
         Spacer(modifier = Modifier.width(4.dp))
 
-        ProductsCard(Modifier.weight(1f))
+        ProductsCard(products, Modifier.weight(1f), productsVisible) { productsVisible = !productsVisible }
     }
 }
 
 @Composable
-fun SalesCard(modifier: Modifier) {
+fun SalesCard(sales: Double?, modifier: Modifier, salesVisible: Boolean, onToggleSales: () -> Unit) {
     ElevatedCard(
         modifier
             .height(80.dp)
@@ -142,13 +160,6 @@ fun SalesCard(modifier: Modifier) {
         )
     )
     {
-      /*  var amountVisibility by remember{mutableStateOf(false) }
-
-        val icon = if (amountVisibility)
-            painterResource(id = R.drawable.eye_icon)
-        else
-            painterResource(id = R.drawable.invisible_eye_icon)*/
-
 
         Row(modifier.padding(top = 8.dp)) {
 
@@ -161,13 +172,10 @@ fun SalesCard(modifier: Modifier) {
             Spacer(modifier = Modifier
                 .width(60.dp)
                 .height(30.dp))
-            IconButton(onClick = {
-                /*amountVisibility = !amountVisibility*/
-            }) {
-                /*AnimatedVisibility(amountVisibility) {}*/
+            IconButton(onClick = onToggleSales ) {
+
                     Icon(
-                        painter = painterResource(id = R.drawable.eye_icon),
-                        /*painter = icon,*/
+                        painter = painterResource(id = if (salesVisible) R.drawable.eye_icon else R.drawable.invisible_eye),
                         contentDescription = "hide icon",
                         modifier
                             .size(11.dp)
@@ -196,7 +204,7 @@ fun SalesCard(modifier: Modifier) {
             Spacer(modifier = Modifier.width(2.dp))
 
             Text(
-                text = "2000", /*if (amountVisibility) "2000" else ".....",*/ //TODO
+                text = if (salesVisible) sales?.toString() ?: "0.0" else "***",
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color(0xFF000000),
             )
@@ -206,7 +214,7 @@ fun SalesCard(modifier: Modifier) {
 }
 
 @Composable
-fun ProfitCard(modifier: Modifier) {
+fun ProfitCard(profit: Double?, modifier: Modifier, profitVisible: Boolean, onToggleProfit: () -> Unit) {
     ElevatedCard(
         modifier
             .height(80.dp)
@@ -228,23 +236,16 @@ fun ProfitCard(modifier: Modifier) {
             Spacer(modifier = Modifier
                 .width(60.dp)
                 .height(30.dp))
-            IconButton(onClick = {
-                /*amountVisibility = !amountVisibility*/
-            }) {
-                /*AnimatedVisibility(amountVisibility) {}*/
+            IconButton(onClick = onToggleProfit ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.eye_icon),
-                    /*painter = icon,*/
+                    painter = painterResource(id = if (profitVisible) R.drawable.eye_icon else R.drawable.invisible_eye),
                     contentDescription = "hide icon",
                     modifier
                         .size(11.dp)
                         .offset((-3).dp, (-3.5).dp)
                 )
-
-
             }
         }
-
 
         Spacer(modifier = Modifier.height(30.dp))
 
@@ -264,7 +265,7 @@ fun ProfitCard(modifier: Modifier) {
             Spacer(modifier = Modifier.width(2.dp))
 
             Text(
-                text = "2000", /*if (amountVisibility) "2000" else ".....",*/ //TODO
+                text = if (profitVisible) profit?.toString() ?: "0.0" else "***" ,
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color(0xFF000000),
             )
@@ -275,7 +276,7 @@ fun ProfitCard(modifier: Modifier) {
 
 
 @Composable
-fun ProductsCard(modifier: Modifier) {
+fun ProductsCard(products: Int?, modifier: Modifier, productsVisible: Boolean, onToggleProduct: () -> Unit) {
     ElevatedCard(
         modifier
             .height(80.dp)
@@ -297,23 +298,17 @@ fun ProductsCard(modifier: Modifier) {
             Spacer(modifier = Modifier
                 .width(35.dp)
                 .height(30.dp))
-            IconButton(onClick = {
-                /*amountVisibility = !amountVisibility*/
-            }) {
-                /*AnimatedVisibility(amountVisibility) {}*/
+            IconButton(onClick = onToggleProduct ) {
+
                 Icon(
-                    painter = painterResource(id = R.drawable.eye_icon),
-                    /*painter = icon,*/
+                    painter = painterResource(id = if (productsVisible) R.drawable.eye_icon else R.drawable.invisible_eye),
                     contentDescription = "hide icon",
                     modifier
                         .size(11.dp)
                         .offset((-1).dp, (-3.5).dp)
                 )
-
-
             }
         }
-
 
         Spacer(modifier = Modifier.height(30.dp))
 
@@ -324,16 +319,8 @@ fun ProductsCard(modifier: Modifier) {
             horizontalArrangement = Arrangement.Center
         )
         {
-            Icon(
-                painter = painterResource(R.drawable.naira_icon),
-                contentDescription = "naira icon",
-                modifier = Modifier.padding(top = 5.2.dp)
-
-            )
-            Spacer(modifier = Modifier.width(2.dp))
-
             Text(
-                text = "2000", /*if (amountVisibility) "2000" else ".....",*/ //TODO
+                text = if (productsVisible) products?.toString() ?: "0" else "***" ,
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color(0xFF000000),
             )
@@ -363,9 +350,15 @@ fun AlertsItem() { //TODO
 @Composable
 fun QuickLinksCard(navigateToRestock: () -> Unit, navigateToAnalytics: () -> Unit) {
     Row {
-        RestockLinkCard(Modifier.weight(1.5f).clickable { navigateToRestock()})
+        RestockLinkCard(
+            Modifier
+                .weight(1.5f)
+                .clickable { navigateToRestock() })
         Spacer(modifier = Modifier.width(10.dp))
-        AnalyticsLinkCard(Modifier.weight(2f).clickable { navigateToAnalytics()})
+        AnalyticsLinkCard(
+            Modifier
+                .weight(2f)
+                .clickable { navigateToAnalytics() })
     }
 }
 
@@ -436,7 +429,9 @@ fun AnalyticsLinkCard(modifier: Modifier) {
                 Icon(
                     painter = painterResource(R.drawable.metrics_icon),
                     contentDescription = "metrics",
-                    modifier.size(11.dp).offset(0.dp, 2.dp)
+                    modifier
+                        .size(11.dp)
+                        .offset(0.dp, 2.dp)
                 )
                 Spacer(modifier = Modifier.width(120.dp))
                 Text(
@@ -452,7 +447,8 @@ fun AnalyticsLinkCard(modifier: Modifier) {
                 contentDescription = "metrics",
                 modifier = modifier
                     /*.padding(top = 11.dp, start = 60.dp)*/
-                    .size(500.dp).height(120.dp)
+                    .size(500.dp)
+                    .height(120.dp)
             )
 
             Text(

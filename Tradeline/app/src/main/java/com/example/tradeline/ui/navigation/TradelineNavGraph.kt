@@ -21,7 +21,8 @@ fun BottomNavGraph(navController: NavHostController, userId:Int, storeName:Strin
                 navigateToProfile = { navController.navigate(BottomNavRoute.Account.route) },
                 navigateToRestock = { navController.navigate(Restock.route) },
                 navigateToAnalytics = { navController.navigate(BottomNavRoute.Analytics.route) },
-                storeName = storeName
+                storeName = storeName,
+                userId = userId
             )
         }
         composable(route = BottomNavRoute.Sales.route) {
@@ -40,12 +41,14 @@ fun BottomNavGraph(navController: NavHostController, userId:Int, storeName:Strin
             )
         }
         composable(route = BottomNavRoute.Analytics.route) {
-            AnalyticsScreen()
+            AnalyticsScreen( userId = userId )
         }
         composable(route = BottomNavRoute.Account.route) {
-            AccountScreen(storeName = storeName)
+            AccountScreen(storeName = storeName,
+            onLogout = { navController.navigate(Onboarding.route) } )
         }
         tradelineNavGraph(navController = navController, userId)
+        onboardingNavGraph(navController = navController)
     }
 }
 
@@ -73,8 +76,7 @@ fun NavGraphBuilder.tradelineNavGraph(navController: NavHostController, userId: 
              val itemId = it.arguments?.getString("itemId")?.toInt() ?: 0
              InventoryProductDetailsScreen(
                  itemId = itemId,
-                 //userId = userId,
-                 navigateBack = { navController.popBackStack() },
+                 navigateBack = { navController.popBackStack() }
              )
         }
     }

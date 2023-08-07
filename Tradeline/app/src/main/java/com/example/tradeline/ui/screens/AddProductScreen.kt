@@ -1,12 +1,14 @@
 package com.example.tradeline.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -99,6 +101,7 @@ fun InventoryAddProductScreen(
                 OutlinedTextField(
                     value = productQuantity,
                     onValueChange = {productQuantity = it},
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier
                         .width(310.dp)
                         .height(50.dp)
@@ -119,6 +122,7 @@ fun InventoryAddProductScreen(
                 OutlinedTextField(
                     value = description,
                     onValueChange = {description = it},
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     modifier = Modifier
                         .width(310.dp)
                         .height(80.dp)
@@ -142,6 +146,7 @@ fun InventoryAddProductScreen(
                         OutlinedTextField(
                             value = costPrice,
                             onValueChange = {costPrice = it},
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                             modifier = Modifier.width(150.dp).height(50.dp).offset(10.dp, 10.dp),
                             shape = MaterialTheme.shapes.large,
                             enabled = true, //TODO
@@ -172,6 +177,7 @@ fun InventoryAddProductScreen(
                         OutlinedTextField(
                             value = sellingPrice,
                             onValueChange = {sellingPrice = it},
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                             modifier = Modifier.width(150.dp).height(50.dp).offset(0.dp, 10.dp),
                             shape = MaterialTheme.shapes.large,
                             enabled = true, //TODO

@@ -75,7 +75,6 @@ fun InventoryRestockProductScreen(
             OutlinedTextField(
                 value = "",
                 onValueChange = {},
-                /*label = { Text(stringResource(R.string.phone_number)) },*/
                 modifier = Modifier
                     .width(310.dp)
                     .height(50.dp)
@@ -85,8 +84,6 @@ fun InventoryRestockProductScreen(
                 singleLine = true
             )
         }
-
-
 
         Row(modifier=Modifier.offset(0.dp, 90.dp) ){
             ReCostPrice (
@@ -160,7 +157,6 @@ fun dropDownMenu(modifier: Modifier){
             OutlinedTextField(
                 value = selectedItem,
                 onValueChange = {selectedItem = it},
-                /*label = { Text(stringResource(R.string.phone_number)) },*/
                 modifier = Modifier
                     .width(310.dp)
                     .height(50.dp)
@@ -222,7 +218,6 @@ fun ReCostPrice(modifier: Modifier) {
             OutlinedTextField(
                 value = "",
                 onValueChange = {},
-                /*label = { Text(stringResource(R.string.phone_number)) },*/
                 modifier = Modifier
                     .width(150.dp)
                     .height(50.dp)
@@ -262,7 +257,6 @@ fun ReSellingPrice(modifier: Modifier) {
             OutlinedTextField(
                 value = "",
                 onValueChange = {},
-                /*label = { Text(stringResource(R.string.phone_number)) },*/
                 modifier = Modifier
                     .width(150.dp)
                     .height(50.dp)

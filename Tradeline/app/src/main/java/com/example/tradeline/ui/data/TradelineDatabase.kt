@@ -1,4 +1,4 @@
-package com.example.tradeline.data
+package com.example.tradeline.ui.data
 
 import android.content.Context
 import androidx.room.Database

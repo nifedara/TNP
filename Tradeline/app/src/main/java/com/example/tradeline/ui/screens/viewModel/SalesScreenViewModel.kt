@@ -1,11 +1,12 @@
 package com.example.tradeline.ui.screens.viewModel
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tradeline.data.Product
-import com.example.tradeline.data.ProductsRepository
-import com.example.tradeline.data.Transaction
-import com.example.tradeline.data.TransactionsRepository
+import com.example.tradeline.ui.data.Product
+import com.example.tradeline.ui.data.ProductsRepository
+import com.example.tradeline.ui.data.Transaction
+import com.example.tradeline.ui.data.TransactionsRepository
 import kotlinx.coroutines.flow.*
 
 class SalesViewModel(
@@ -46,22 +47,40 @@ class SalesViewModel(
         currentProduct.value = product
     }
 
-    suspend fun updateProduct(updatedQuantity: Int) {
+
+    suspend fun updateProductInsertTransaction(date: String, product: String, quantity: Int, price: Double, userId: Int) {
         val currentProduct = currentProduct.value
 
-        val updatedProduct = currentProduct?.copy(quantity = updatedQuantity)
+        val currentQuantity = currentProduct!!.quantity
+        val updatedQuantity = currentQuantity - quantity
+        val updatedProduct = currentProduct.copy(quantity = updatedQuantity)
 
-        if (updatedProduct != null) {
+        val transaction =  Transaction(date = date, product = product, quantity = quantity, price = price, userId = userId)
+
+        if (updatedQuantity >= 0) {
             productsRepository.updateProduct(updatedProduct)
+            transactionsRepository.insertTransaction(transaction)
+            handleSuccessfulInsert()
+        } else{
+            handleInvalidInsert()
         }
     }
 
-    suspend fun insertTransaction(date: String, product: String, quantity: Int, price: Double, userId: Int){
-       val transaction =  Transaction(date = date, product = product, quantity = quantity, price = price, userId = userId)
-       transactionsRepository.insertTransaction(transaction)
+    private val recordSalesState = mutableStateOf(RecordSalesState())
+
+    private fun handleSuccessfulInsert() {
+        recordSalesState.value = RecordSalesState(successfulInsert = true)
     }
 
+    private fun handleInvalidInsert() {
+        recordSalesState.value = RecordSalesState(invalidInsert = true)
+    }
 }
+
+data class RecordSalesState(
+    val successfulInsert: Boolean = false,
+    val invalidInsert: Boolean = false
+)
 
 //Ui State for InventoryHomeScreen
 data class SalesUiState( val itemList: List<Transaction> = listOf())

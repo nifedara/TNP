@@ -2,8 +2,8 @@ package com.example.tradeline.ui.screens.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tradeline.data.Product
-import com.example.tradeline.data.ProductsRepository
+import com.example.tradeline.ui.data.Product
+import com.example.tradeline.ui.data.ProductsRepository
 import kotlinx.coroutines.flow.*
 
 

@@ -54,6 +54,14 @@ object AppViewModelProvider {
                     return SalesViewModel(transactionsRepository = transactionsRepository, productsRepository = productsRepository, userId ?: 0) as T
                 }
 
+                if (modelClass.isAssignableFrom(DashboardViewModel::class.java)) {
+                    return DashboardViewModel(transactionsRepository = transactionsRepository, productsRepository = productsRepository, userId ?: 0) as T
+                }
+
+                if (modelClass.isAssignableFrom(AnalyticsViewModel::class.java)) {
+                    return AnalyticsViewModel(transactionsRepository = transactionsRepository, userId ?: 0) as T
+                }
+
                 throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
         }
