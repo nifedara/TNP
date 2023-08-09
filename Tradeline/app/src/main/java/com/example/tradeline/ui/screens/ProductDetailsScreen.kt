@@ -50,11 +50,15 @@ fun InventoryProductDetailsScreen(
         }
     ){
         Column(
-            modifier = Modifier.fillMaxWidth().padding(24.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
             verticalArrangement = Arrangement.Center //just added
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth().offset(0.dp, 0.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(0.dp, 0.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
@@ -66,14 +70,27 @@ fun InventoryProductDetailsScreen(
                     fontSize = 16.sp
                 )
             }
-            Row(modifier = Modifier.fillMaxWidth().offset(0.dp, 70.dp)){
+            Spacer(Modifier.height(58.dp))
+//            if (outOfStock) {Text( text = "Out of Stock", color = Color.Red, textAlign = TextAlign.Center)}
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                if (outOfStock) {Text( text = "Out of Stock", color = Color.Red, textAlign = TextAlign.Start)}
+            }
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .offset(0.dp, 30.dp)){
 
                 Column(
-                    Modifier.fillMaxWidth().weight(1f).offset(0.dp, 15.dp)) {
-                    if (outOfStock) {Text( text = "Out of Stock", color = Color.Red, textAlign = TextAlign.Center)}
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .offset(0.dp, 15.dp)) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Text(
-                            text = "Product Name",
+                            text = "Name",
                             color = Color(0xFF2B2B85),
                             modifier = Modifier.offset(12.dp),
                             fontSize = 16.sp
@@ -83,23 +100,38 @@ fun InventoryProductDetailsScreen(
                 Spacer(modifier = Modifier.width(5.dp) )
 
                 Column(
-                    Modifier.weight(2f).fillMaxWidth()) {
+                    Modifier
+                        .weight(2f)
+                        .fillMaxWidth()) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         OutlinedTextField(
                             value = detail.name,
                             onValueChange = {detail.name = it},
-                            modifier = Modifier.width(200.dp).height(50.dp).offset(10.dp, 10.dp),
+                            modifier = Modifier
+                                .width(200.dp)
+                                .height(50.dp)
+                                .offset(10.dp, 10.dp),
                             shape = MaterialTheme.shapes.large,
                             enabled = false,
-                            singleLine = true)
+                            singleLine = true,
+                            colors = OutlinedTextFieldDefaults.colors(
+                                disabledBorderColor = Color(0xFF2B2B85),
+                                disabledTextColor = Color(0xFF2B2B85),
+                                disabledPlaceholderColor = Color(0xFF2B2B85),
+                                disabledLabelColor = Color(0xFF2B2B85))
+                            )
                     }
                 }
             }
 
-            Row(modifier = Modifier.fillMaxWidth().offset(0.dp, 100.dp)){
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .offset(0.dp, 50.dp)){
                 Column(
                     Modifier
-                        .fillMaxWidth().weight(1f).offset(0.dp, 15.dp)) {
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .offset(0.dp, 15.dp)) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Text(
                             text = "Selling Price",
@@ -112,12 +144,17 @@ fun InventoryProductDetailsScreen(
                 Spacer(modifier = Modifier.width(5.dp) )
 
                 Column(
-                    Modifier.fillMaxWidth().weight(2f)) {
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(2f)) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         OutlinedTextField(
                             value = detail.sellingPrice,
                             onValueChange = {},
-                            modifier = Modifier.width(200.dp).height(50.dp).offset(10.dp, 10.dp),
+                            modifier = Modifier
+                                .width(200.dp)
+                                .height(50.dp)
+                                .offset(10.dp, 10.dp),
                             shape = MaterialTheme.shapes.large,
                             enabled = false,
                             singleLine = true,
@@ -127,15 +164,26 @@ fun InventoryProductDetailsScreen(
                                     contentDescription = "naira icon",
                                     modifier = Modifier.padding(top = 5.2.dp)
                                 )
-                            }
-                        )
+                            },
+                            colors = OutlinedTextFieldDefaults.colors(
+                                disabledBorderColor = Color(0xFF2B2B85),
+                                disabledTextColor = Color(0xFF2B2B85),
+                                disabledPlaceholderColor = Color(0xFF2B2B85),
+                                disabledLabelColor = Color(0xFF2B2B85))
+                            )
+
                     }
                 }
             }
 
-            Row(modifier = Modifier.fillMaxWidth().offset(0.dp, 140.dp)){
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .offset(0.dp, 80.dp)){
                 Column(
-                    Modifier.fillMaxWidth().weight(1f).offset(0.dp, 15.dp)) {
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .offset(0.dp, 15.dp)) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Text(
                             text = "Description",
@@ -148,56 +196,67 @@ fun InventoryProductDetailsScreen(
                 Spacer(modifier = Modifier.width(5.dp) )
 
                 Column(
-                    Modifier.fillMaxWidth().weight(2f)) {
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(2f)) {
                     Row(modifier = Modifier.fillMaxWidth()) {
                         OutlinedTextField(
                             value = detail.description,
                             onValueChange = {},
-                            modifier = Modifier.width(200.dp).height(80.dp).offset(10.dp, 10.dp),
+                            modifier = Modifier
+                                .width(200.dp)
+                                .height(80.dp)
+                                .offset(10.dp, 10.dp),
                             shape = MaterialTheme.shapes.large,
                             enabled = false,
-                            singleLine = false,)
+                            singleLine = false,
+                            colors = OutlinedTextFieldDefaults.colors(
+                                disabledBorderColor = Color(0xFF2B2B85),
+                                disabledTextColor = Color(0xFF2B2B85),
+                                disabledPlaceholderColor = Color(0xFF2B2B85),
+                                disabledLabelColor = Color(0xFF2B2B85))
+                            )
                     }
                 }
             }
 
-            Row(modifier = Modifier.fillMaxWidth().offset(0.dp, 200.dp),
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .offset(0.dp, 120.dp),
                 horizontalArrangement = Arrangement.Center){
 
                 var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
                 var editDialogRequested by rememberSaveable { mutableStateOf(false) }
 
                 Column(
-                    Modifier.fillMaxWidth().weight(2f).offset(0.dp, 15.dp)) {
-                    Row(modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center) {
-                        Button(
-                            onClick = { deleteConfirmationRequired = true },
-                            modifier = Modifier.width(120.dp).height(50.dp),
-                            shape = MaterialTheme.shapes.large,
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFFFFFFFF),
-                                contentColor = Color(0xFFE36161)),
-                            enabled = true
-                        )
-                        {Text( text = "DELETE")}
-                    }
-                }
-                Spacer(modifier = Modifier.width(5.dp) )
-
-                Column(
-                    Modifier.fillMaxWidth().weight(2f).offset(0.dp, 15.dp)) {
+                    Modifier
+                        .fillMaxWidth()
+                        .offset(0.dp, 15.dp)) {
                     Row(modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center) {
 
                         Button(onClick = { editDialogRequested = true },
-                            modifier = Modifier.width(120.dp).height(50.dp),
+                            modifier = Modifier.fillMaxWidth()
+                                .height(50.dp),
                             shape = MaterialTheme.shapes.large,
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
                                 contentColor = Color(0xFFFFFFFF)),
                             enabled = true
-                        ){Text( text = "EDIT")}
+                        )
+                        {Text( text = "EDIT")}
+                    }
+                    Spacer(modifier = Modifier.height(15.dp))
+                    Row(modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center) {
+                        TextButton(onClick = {  deleteConfirmationRequired = true },modifier = Modifier.fillMaxWidth()
+                            .height(50.dp),
+                            shape = MaterialTheme.shapes.large,
+                            enabled = true,
+                        ) {
+
+                            Text( text = "DELETE", color = Color(0xFFE36161))
+                        }
                     }
                     if (deleteConfirmationRequired) {
                         DeleteConfirmationDialog(
@@ -237,17 +296,17 @@ private fun DeleteConfirmationDialog(
     modifier: Modifier = Modifier
 ) {
     AlertDialog(
-        onDismissRequest = { onDeleteCancel() },
+        onDismissRequest = { /* Do nothing */ },
         title = { Text("???") },
         text = { Text("Are you sure you want to delete?") },
         modifier = modifier.padding(16.dp),
         dismissButton = {
             TextButton(onClick = onDeleteCancel) {
-                Text(text = "No", color = Color(0xFF22226A)) }
+                Text(text = "No") }
         },
         confirmButton = {
             TextButton(onClick = onDeleteConfirm) {
-                Text(text = "Yes", color = Color(0xFFE36161))
+                Text(text = "Yes")
             }
         }
     )
@@ -268,18 +327,40 @@ private fun EditBottomSheet(
         onDismissRequest = { onEditCancel() })
     {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(24.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "Product Name")
-            Spacer(modifier = Modifier.height(2.dp))
-            OutlinedTextField(value = productName, onValueChange = {productName = it}, enabled = true, modifier = Modifier.fillMaxWidth())
-            
+            Text(text = "Product Name", color =Color(0xFF2B2B85))
+            Spacer(modifier = Modifier.height(3.dp))
+            OutlinedTextField(value = productName,
+                onValueChange = {productName = it},
+                enabled = true,
+                modifier = Modifier.fillMaxWidth(), colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(0xFF2B2B85),
+                    unfocusedBorderColor = Color(0xFF2B2B85),
+                    unfocusedLabelColor = Color(0xFF2B2B85),
+                    focusedLabelColor = Color(0xFF2B2B85),
+                    cursorColor = Color(0xFF2B2B85))
+                )
+
             Spacer(modifier = Modifier.height(10.dp))
-            
-            Text(text = "Description")
-            Spacer(modifier = Modifier.height(2.dp))
-            OutlinedTextField(value = description, onValueChange = {description = it}, enabled = true, modifier = Modifier.fillMaxWidth())
+
+            Text(text = "Description", color =Color(0xFF2B2B85) )
+            Spacer(modifier = Modifier.height(3.dp))
+            OutlinedTextField(value = description,
+                onValueChange = {description = it},
+                enabled = true,
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(0xFF2B2B85),
+                    unfocusedBorderColor = Color(0xFF2B2B85),
+                    unfocusedLabelColor = Color(0xFF2B2B85),
+                    focusedLabelColor = Color(0xFF2B2B85),
+                    cursorColor = Color(0xFF2B2B85),
+               )
+                )
 
             Spacer(modifier = Modifier.height(20.dp))
             Button(onClick = { onEditClick(productName, description) }, modifier = Modifier.fillMaxWidth()) {

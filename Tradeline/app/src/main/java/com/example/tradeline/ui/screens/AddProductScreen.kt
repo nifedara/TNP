@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -33,7 +32,7 @@ fun InventoryAddProductScreen(
     canNavigateBack: Boolean = true,
     userId: Int, // Add the userId parameter
     viewModel: InventoryAddProductScreenViewModel = viewModel(factory = AppViewModelProvider.createFactory())
-){
+) {
     val coroutineScope = rememberCoroutineScope()
 
     var productName by remember { mutableStateOf("") }
@@ -50,138 +49,159 @@ fun InventoryAddProductScreen(
             )
         }
     ) {
-        Column(modifier = Modifier.fillMaxWidth().padding(24.dp)) {
-            Row {
-                Text(
-                    text = "back",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color(0xFF000000),
-                    modifier = Modifier.offset(20.dp),
-                )
-            }
-            Row(modifier = Modifier.fillMaxWidth().offset(0.dp, 0.dp), horizontalArrangement = Arrangement.Start) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(32.dp)) {
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(0.dp, 50.dp),
+                horizontalArrangement = Arrangement.Start
+            ) {
                 Text(
                     text = "Add Product",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color(0xFF2B2B85),
-                    modifier = Modifier.offset(20.dp, 15.dp),
+                    modifier = Modifier.offset(0.dp, 0.dp),
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
             }
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(0.dp, 70.dp),
+                horizontalArrangement = Arrangement.Start
+            ) {
                 Text(
                     text = "Product Name",
                     color = Color(0xFF2B2B85),
-                    modifier = Modifier.offset(20.dp, 30.dp)
-                )
+
+                    )
             }
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(0.dp, 70.dp),
+                horizontalArrangement = Arrangement.Start
+            ) {
                 OutlinedTextField(
                     value = productName,
-                    onValueChange = {productName = it},
+                    onValueChange = { productName = it },
                     modifier = Modifier
-                        .width(310.dp)
-                        .height(50.dp)
-                        .offset(10.dp, 40.dp),
+                        .fillMaxWidth()
+                        .height(50.dp),
                     shape = MaterialTheme.shapes.large,
-                    enabled = true, //TODO
-                    singleLine = true
+                    enabled = true,
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF2B2B85),
+                        unfocusedBorderColor = Color(0xFF2B2B85),
+                        unfocusedLabelColor = Color(0xFF2B2B85),
+                        focusedLabelColor = Color(0xFF2B2B85),
+                        cursorColor = Color(0xFF2B2B85)
+                    )
                 )
             }
 
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(0.dp, 90.dp),
+                horizontalArrangement = Arrangement.Start
+            ) {
                 Text(
                     text = "Product Quantity",
                     color = Color(0xFF2B2B85),
-                    modifier = Modifier.offset(20.dp, 60.dp)
                 )
+
             }
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(0.dp, 100.dp),
+                horizontalArrangement = Arrangement.Start
+            ) {
                 OutlinedTextField(
                     value = productQuantity,
-                    onValueChange = {productQuantity = it},
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    onValueChange = { productQuantity = it },
                     modifier = Modifier
-                        .width(310.dp)
                         .height(50.dp)
-                        .offset(10.dp, 70.dp),
+                        .fillMaxWidth(),
                     shape = MaterialTheme.shapes.large,
-                    enabled = true, //TODO
-                    singleLine = true
+                    enabled = true,
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF2B2B85),
+                        unfocusedBorderColor = Color(0xFF2B2B85),
+                        unfocusedLabelColor = Color(0xFF2B2B85),
+                        focusedLabelColor = Color(0xFF2B2B85),
+                        cursorColor = Color(0xFF2B2B85)
+                    )
                 )
             }
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .offset(0.dp, 120.dp)) {
                 Text(
                     text = "Description",
                     color = Color(0xFF2B2B85),
-                    modifier = Modifier.offset(20.dp, 90.dp)
                 )
             }
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(0.dp, 130.dp),
+                horizontalArrangement = Arrangement.Start
+            ) {
                 OutlinedTextField(
                     value = description,
-                    onValueChange = {description = it},
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    onValueChange = { description = it },
                     modifier = Modifier
-                        .width(310.dp)
                         .height(80.dp)
-                        .offset(10.dp, 100.dp),
+                        .fillMaxWidth(),
                     shape = MaterialTheme.shapes.large,
-                    enabled = true, //TODO
-                    singleLine = true
+                    enabled = true,
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF2B2B85),
+                        unfocusedBorderColor = Color(0xFF2B2B85),
+                        unfocusedLabelColor = Color(0xFF2B2B85),
+                        focusedLabelColor = Color(0xFF2B2B85),
+                        cursorColor = Color(0xFF2B2B85)
+                    )
                 )
             }
-            Row(modifier=Modifier.offset(0.dp, 120.dp) ){
-                //CostPrice (Modifier.weight(1f).offset(0.dp, 0.dp).width(100.dp))
-                Column(Modifier.fillMaxWidth().weight(1f).offset(0.dp, 0.dp).width(100.dp)) {
-                    Row(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier.offset(0.dp, 0.dp)) {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .offset(0.dp, 0.dp)
+                        .width(100.dp)) {
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .offset(0.dp, 150.dp)) {
                         Text(
                             text = "Cost Price",
                             color = Color(0xFF2B2B85),
-                            modifier = Modifier.offset(20.dp)
                         )
                     }
-                    Row(modifier = Modifier.fillMaxWidth()) {
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .offset(0.dp, 160.dp)) {
                         OutlinedTextField(
                             value = costPrice,
-                            onValueChange = {costPrice = it},
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                            modifier = Modifier.width(150.dp).height(50.dp).offset(10.dp, 10.dp),
+                            onValueChange = { costPrice = it },
+                            modifier = Modifier
+                                .height(50.dp)
+                                .fillMaxWidth(),
                             shape = MaterialTheme.shapes.large,
-                            enabled = true, //TODO
+                            enabled = true,
                             singleLine = true,
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.naira_icon),
-                                    contentDescription = "naira icon",
-                                    modifier = Modifier.padding(top = 5.2.dp)
-                                )
-                            }
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.width(5.dp))
-
-                //SellingPrice(Modifier.weight(1f).offset(0.dp, 0.dp).width(100.dp))
-                Column(Modifier.fillMaxWidth().weight(1f).offset(0.dp, 0.dp).width(100.dp)) {
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        Text(
-                            text = "Selling Price",
-                            color = Color(0xFF2B2B85),
-                            modifier = Modifier.offset(10.dp)
-                        )
-                    }
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        OutlinedTextField(
-                            value = sellingPrice,
-                            onValueChange = {sellingPrice = it},
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                            modifier = Modifier.width(150.dp).height(50.dp).offset(0.dp, 10.dp),
-                            shape = MaterialTheme.shapes.large,
-                            enabled = true, //TODO
-                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             leadingIcon = {
                                 Icon(
                                     painter = painterResource(R.drawable.naira_icon),
@@ -189,51 +209,97 @@ fun InventoryAddProductScreen(
                                     modifier = Modifier.padding(top = 5.2.dp)
                                 )
                             },
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = Color(0xFF2B2B85),
+                                unfocusedBorderColor = Color(0xFF2B2B85),
+                                unfocusedLabelColor = Color(0xFF2B2B85),
+                                focusedLabelColor = Color(0xFF2B2B85),
+                                cursorColor = Color(0xFF2B2B85)
+                            )
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(5.dp))
+
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .width(100.dp)) {
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .offset(0.dp, 150.dp)) {
+                        Text(
+                            text = "Selling Price",
+                            color = Color(0xFF2B2B85),
+                        )
+                    }
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .offset(0.dp, 160.dp)) {
+                        OutlinedTextField(
+                            value = sellingPrice,
+                            onValueChange = { sellingPrice = it },
+                            modifier = Modifier
+                                .height(50.dp)
+                                .fillMaxWidth(),
+                            shape = MaterialTheme.shapes.large,
+                            enabled = true,
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(R.drawable.naira_icon),
+                                    contentDescription = "naira icon",
+                                    modifier = Modifier.padding(top = 5.2.dp)
+                                )
+                            },
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = Color(0xFF2B2B85),
+                                unfocusedBorderColor = Color(0xFF2B2B85),
+                                unfocusedLabelColor = Color(0xFF2B2B85),
+                                focusedLabelColor = Color(0xFF2B2B85),
+                                cursorColor = Color(0xFF2B2B85)
+                            )
                         )
                     }
                 }
             }
 
-            Row(modifier = Modifier.fillMaxWidth().offset(0.dp, 160.dp), horizontalArrangement = Arrangement.Center){
-                Button(onClick = {
-                    coroutineScope.launch {
-                        viewModel.createNewProduct(
-                            productName,
-                            productQuantity,
-                            description,
-                            costPrice,
-                            sellingPrice,
-                            userId
-                        )
-                        onCreate()
-                    }
-                },
-                    modifier = Modifier.width(320.dp).height(50.dp),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(0.dp, 190.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Button(
+                    onClick = {
+                        coroutineScope.launch {
+                            viewModel.createNewProduct(
+                                productName,
+                                productQuantity,
+                                description,
+                                costPrice,
+                                sellingPrice,
+                                userId
+                            )
+                            onCreate()
+                        }
+                    },
+                    modifier = Modifier
+                        .height(50.dp)
+                        .fillMaxWidth(),
                     shape = MaterialTheme.shapes.large,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         contentColor = Color(0xFFFFFFFF)
                     ),
-                    enabled = true //TODO
+                    enabled = true
                 ) {
-                    Text( text = "CREATE")
+                    Text(text = "CREATE")
                 }
             }
         }
     }
 }
-
-@Composable
-    fun AddProductImageCard() {
-    }
-
-    @Composable
-    fun AddProductForm() {
-    }
-
-
-    @Preview(showSystemUi = true, showBackground = true)
-    @Composable
-    fun AddProductPreview() {
-        //AddProductBody()
-    }

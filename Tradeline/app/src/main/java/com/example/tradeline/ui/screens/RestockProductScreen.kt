@@ -42,8 +42,8 @@ fun InventoryRestockProductScreen(
     // Mutable state for the input fields
     var quantity by rememberSaveable { mutableStateOf(productInfo?.quantity.toString()) }
     var description by rememberSaveable { mutableStateOf(productInfo?.description.orEmpty()) }
-    var costPrice by rememberSaveable { mutableStateOf(productInfo?.costPrice.toString().orEmpty()) }
-    var sellingPrice by rememberSaveable { mutableStateOf(productInfo?.sellingPrice.toString().orEmpty()) }
+    var costPrice by rememberSaveable { mutableStateOf(productInfo?.costPrice.toString()) }
+    var sellingPrice by rememberSaveable { mutableStateOf(productInfo?.sellingPrice.toString()) }
 
     LaunchedEffect(productInfo) {
         productInfo?.let {
@@ -69,7 +69,7 @@ fun InventoryRestockProductScreen(
         {
             Row( modifier = Modifier
                 .fillMaxWidth()
-                .offset(0.dp, 0.dp), horizontalArrangement = Arrangement.Start )
+                .offset(0.dp, 40.dp), horizontalArrangement = Arrangement.Start )
             {
                 Text(
                     text = "Restock",
@@ -85,12 +85,12 @@ fun InventoryRestockProductScreen(
                 Text(
                     text = "Product Name",
                     color = Color(0xFF2B2B85),
-                    modifier = Modifier.offset(20.dp, 30.dp)
+                    modifier = Modifier.offset(20.dp, 75.dp)
                 )
             }
-            Row( modifier = Modifier.fillMaxWidth()
+            Row( modifier = Modifier.fillMaxWidth().offset(y = 85.dp)
             ) {
-                ProductDropdown(options = productNames){selectedName ->
+                ProductDropdown(options = productNames){ selectedName ->
                     coroutine.launch { viewModel.getProduct(selectedName) }
                 }
             }
@@ -100,21 +100,27 @@ fun InventoryRestockProductScreen(
                 Text(
                     text = "Product Quantity",
                     color = Color(0xFF2B2B85),
-                    modifier = Modifier.offset(20.dp, 60.dp)
+                    modifier = Modifier.offset(20.dp, 100.dp) //60
                 )
             }
-            Row( modifier = Modifier.fillMaxWidth()
+            Row( modifier = Modifier.fillMaxWidth().offset(10.dp, 110.dp)
             ) {
                 OutlinedTextField(
                     value = quantity,
                     onValueChange = { quantity = it },
                     modifier = Modifier
                         .width(310.dp)
-                        .height(50.dp)
-                        .offset(10.dp, 70.dp),
+                        .height(50.dp),
                     shape = MaterialTheme.shapes.large,
                     enabled = true,
-                    singleLine = true
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF2B2B85),
+                        unfocusedBorderColor = Color(0xFF2B2B85),
+                        unfocusedLabelColor = Color(0xFF2B2B85),
+                        focusedLabelColor = Color(0xFF2B2B85),
+                        cursorColor = Color(0xFF2B2B85)
+                    )
                 )
             }
 
@@ -123,25 +129,31 @@ fun InventoryRestockProductScreen(
                 Text(
                     text = "Product Description",
                     color = Color(0xFF2B2B85),
-                    modifier = Modifier.offset(20.dp, 60.dp)
+                    modifier = Modifier.offset(20.dp, 125.dp)
                 )
             }
-            Row( modifier = Modifier.fillMaxWidth()
+            Row( modifier = Modifier.fillMaxWidth().offset(10.dp, 135.dp)
             ) {
                 OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
                     modifier = Modifier
                         .width(310.dp)
-                        .height(50.dp)
-                        .offset(10.dp, 70.dp),
+                        .height(50.dp),
                     shape = MaterialTheme.shapes.large,
                     enabled = true,
-                    singleLine = true
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF2B2B85),
+                        unfocusedBorderColor = Color(0xFF2B2B85),
+                        unfocusedLabelColor = Color(0xFF2B2B85),
+                        focusedLabelColor = Color(0xFF2B2B85),
+                        cursorColor = Color(0xFF2B2B85)
+                    )
                 )
             }
 
-            Row(modifier=Modifier.offset(0.dp, 90.dp) ){
+            Row(modifier=Modifier.offset(0.dp, 150.dp) ){
                 Column(
                     Modifier
                         .fillMaxWidth()
@@ -155,15 +167,14 @@ fun InventoryRestockProductScreen(
                             modifier = Modifier.offset(20.dp)
                         )
                     }
-                    Row( modifier = Modifier.fillMaxWidth()
+                    Row( modifier = Modifier.fillMaxWidth().offset(10.dp, 10.dp)
                     ) {
                         OutlinedTextField(
                             value = costPrice,
                             onValueChange = { costPrice = it },
                             modifier = Modifier
                                 .width(150.dp)
-                                .height(50.dp)
-                                .offset(10.dp, 10.dp),
+                                .height(50.dp),
                             shape = MaterialTheme.shapes.large,
                             enabled = true, //TODO
                             singleLine = true,
@@ -173,7 +184,14 @@ fun InventoryRestockProductScreen(
                                     contentDescription = "naira icon",
                                     modifier = Modifier.padding(top = 5.2.dp)
                                 )
-                            }
+                            },
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = Color(0xFF2B2B85),
+                                unfocusedBorderColor = Color(0xFF2B2B85),
+                                unfocusedLabelColor = Color(0xFF2B2B85),
+                                focusedLabelColor = Color(0xFF2B2B85),
+                                cursorColor = Color(0xFF2B2B85)
+                            )
                         )
                     }
                 }
@@ -193,15 +211,14 @@ fun InventoryRestockProductScreen(
                             modifier = Modifier.offset(10.dp)
                         )
                     }
-                    Row( modifier = Modifier.fillMaxWidth()
+                    Row( modifier = Modifier.fillMaxWidth().offset(0.dp, 10.dp)
                     ) {
                         OutlinedTextField(
                             value = sellingPrice,
                             onValueChange = { sellingPrice = it },
                             modifier = Modifier
                                 .width(150.dp)
-                                .height(50.dp)
-                                .offset(0.dp, 10.dp),
+                                .height(50.dp),
                             shape = MaterialTheme.shapes.large,
                             enabled = true,
                             singleLine = true,
@@ -212,13 +229,20 @@ fun InventoryRestockProductScreen(
                                     modifier = Modifier.padding(top = 5.2.dp)
                                 )
                             },
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = Color(0xFF2B2B85),
+                                unfocusedBorderColor = Color(0xFF2B2B85),
+                                unfocusedLabelColor = Color(0xFF2B2B85),
+                                focusedLabelColor = Color(0xFF2B2B85),
+                                cursorColor = Color(0xFF2B2B85)
+                            )
                         )
                     }
                 }
             }
 
             Row(modifier = Modifier.fillMaxWidth()
-                .offset(0.dp, 130.dp), horizontalArrangement = Arrangement.Center){
+                .offset(0.dp, 180.dp), horizontalArrangement = Arrangement.Center){
 
                 Button(onClick = {
                                  coroutine.launch {
@@ -227,7 +251,7 @@ fun InventoryRestockProductScreen(
                                  }
                                 navigateBack()
                      },
-                    modifier = Modifier.width(320.dp)
+                    modifier = Modifier.width(310.dp)
                         .height(50.dp),
                     shape = MaterialTheme.shapes.large,
                     colors = ButtonDefaults.buttonColors(
@@ -243,7 +267,7 @@ fun InventoryRestockProductScreen(
 }
 
 @Composable
-fun ProductDropdown(modifier: Modifier = Modifier, options: List<String>, onProductSelected: (String) -> Unit) {
+fun ProductDropdown(options: List<String>, onProductSelected: (String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     var selectedOption by rememberSaveable { mutableStateOf(options.firstOrNull()) }
 
@@ -253,7 +277,7 @@ fun ProductDropdown(modifier: Modifier = Modifier, options: List<String>, onProd
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp)
-            .offset(10.dp, 70.dp)
+            //.offset(10.dp, 70.dp)
     ) {
         Text(text = selectedOption ?: "Select a product")
         Icon(

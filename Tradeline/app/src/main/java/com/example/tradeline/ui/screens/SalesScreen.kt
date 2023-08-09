@@ -1,10 +1,11 @@
 package com.example.tradeline.ui.screens
 
+import android.icu.text.SimpleDateFormat
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
-import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -15,19 +16,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tradeline.R
 import com.example.tradeline.TopBar
+import com.example.tradeline.ui.AppViewModelProvider
 import com.example.tradeline.ui.data.Product
 import com.example.tradeline.ui.data.Transaction
-import com.example.tradeline.ui.AppViewModelProvider
 import com.example.tradeline.ui.screens.viewModel.SalesViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
@@ -66,16 +69,19 @@ fun SalesScreen(
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                text = { Text(text = "Record Sales")},
+                text = { Text(text = "Record Sales", color = Color(0xFF2B2B85))},
                 onClick = { salesDialogRequested = true },
+                containerColor = Color(0xFFE1F2CD),
                 icon = {
                     Icon(
                         imageVector = Icons.Default.Add,
-                        contentDescription = "" )
+                        contentDescription = "" ,
+                        tint = Color(0xFF2B2B85) )
                 },
                 modifier = Modifier
                     .padding(20.dp)
-                    .paddingFromBaseline(bottom = 150.dp))
+                    .width(270.dp)
+                    .paddingFromBaseline(bottom = 110.dp))
         },
         floatingActionButtonPosition = FabPosition.Center
     ){
@@ -105,6 +111,19 @@ fun SalesScreen(
 
 @Composable
 fun TransactionHeader(){
+
+   Row(horizontalArrangement = Arrangement.Center) {
+       Text(
+           text = "Transaction History",
+           color = Color(0xFFF7F9FA),
+           fontWeight = FontWeight.Bold,
+           fontSize = 12.sp,
+           modifier = Modifier.offset(10.dp),
+           textAlign = TextAlign.Start
+       )
+
+   }
+    Spacer(Modifier.height(20.dp))
     Card(
         modifier = Modifier.fillMaxWidth(), elevation = 2.dp, backgroundColor = Color(0xFFE7F7FB)
     ) {
@@ -115,28 +134,36 @@ fun TransactionHeader(){
                 text = "Date",
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.h6,
-                color = Color(0xFF2B2B85)
+                color = Color(0xFF22226A),
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center
             )
             Spacer(Modifier.width(4.dp))
             Text(
                 text = "Product",
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.h6,
-                color = Color(0xFF2B2B85)
+                color = Color(0xFF22226A),
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center
             )
             Spacer(Modifier.width(4.dp))
             Text(
                 text = "Quantity",
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.h6,
-                color = Color(0xFF2B2B85)
+                color = Color(0xFF22226A),
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center
             )
             Spacer(Modifier.width(4.dp))
             Text(
                 text = "Price",
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.h6,
-                color = Color(0xFF2B2B85)
+                color = Color(0xFF22226A),
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center
             )
         }
     }
@@ -156,7 +183,8 @@ fun SalesBody(
             Text(
                 text = "no transaction",
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.h4
+                style = MaterialTheme.typography.h4,
+                modifier = Modifier.offset(0.dp, 80.dp)
             )
         } else {
             TransactionList(itemList)
@@ -170,7 +198,7 @@ fun TransactionList(
 ){
     LazyColumn {
         items(items = itemList) { transaction ->
-            Transaction(item = transaction, modifier = Modifier.padding(8.dp))
+            Transaction(item = transaction, modifier = Modifier.padding(0.dp))
         }
     }
 }
@@ -178,37 +206,41 @@ fun TransactionList(
 @Composable
 fun Transaction(item: Transaction, modifier: Modifier = Modifier){
     Row(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start
     ) {
-        Icon(painter = painterResource(R.drawable.dot_icon), contentDescription = "dot")
+        Icon(painter = painterResource(R.drawable.dot_icon), contentDescription = "dot", Modifier.offset(y = 7.dp))
 
         Spacer(modifier.width(1.dp))
         Text(
             text = item.date,
             modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.h6,
-            color = Color(0xFF2B2B85)
+            color = Color(0xFF2B2B85),
+            fontSize = 14.sp
         )
         Spacer(Modifier.width(4.dp))
         Text(
             text = item.product,
             modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.h6,
-            color = Color(0xFF2B2B85)
+            color = Color(0xFF2B2B85),
+            fontSize = 14.sp
         )
-        Spacer(Modifier.width(4.dp))
+        Spacer(Modifier.width(10.dp))
         Text(
             text = item.quantity.toString(),
             modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.h6,
-            color = Color(0xFF2B2B85)
+            color = Color(0xFF2B2B85),
+            fontSize = 14.sp
         )
         Spacer(Modifier.width(4.dp))
         Text(
             text = item.price.toString(),
             modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.h6,
-            color = Color(0xFF2B2B85)
+            color = Color(0xFF2B2B85),
+            fontSize = 14.sp
         )
     }
 }
@@ -222,7 +254,6 @@ private fun SalesBottomSheet(onSalesSheetCancel: () -> Unit, options: List<Strin
                              selectedProductName: String,
                              onProductSelected: (String) -> Unit){
 
-    //val recordSaleState = viewModel.recordSalesState.value
     var showError by remember { mutableStateOf(false) }
 
     // Mutable state for the input fields
@@ -230,7 +261,6 @@ private fun SalesBottomSheet(onSalesSheetCancel: () -> Unit, options: List<Strin
     var sellingPrice by rememberSaveable { mutableStateOf(productInfo?.sellingPrice.toString()) }
     var calculatedPrice by rememberSaveable { mutableStateOf("") }
 
-    //val currentDate = DateFormat.getDateInstance().format(Date()).toString()
     val currentDate = SimpleDateFormat("dd/MM/yy", Locale.getDefault()).format(Date())
 
     LaunchedEffect(productInfo) {
@@ -251,11 +281,14 @@ private fun SalesBottomSheet(onSalesSheetCancel: () -> Unit, options: List<Strin
             // Show error message if quantity is 0 or more than the available quantity
             if (showError) { Text( text = "Enter a valid amount", color = Color.Red) }
 
-            Text(text = "Product Name")
-            Spacer(modifier = Modifier.height(0.dp))
-            ProductDropdown(modifier = Modifier.offset(y = 0.dp), options = options, onProductSelected)
+            Text(text = "Product Name", color = Color(0xFF2B2B85))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            Spacer(modifier = Modifier.height(90.dp))
+            Row(Modifier.fillMaxWidth()) {
+                ProductDropdown(options = options, onProductSelected)
+            }
+
+            Spacer(modifier = Modifier.height(10.dp)) //50.dp
 
             if (showError) { Text(text = "Quantity", color = Color(0xFFE36161)) } else
             { Text(text = "Quantity", color = Color(0xFF2B2B85)) }
@@ -264,33 +297,53 @@ private fun SalesBottomSheet(onSalesSheetCancel: () -> Unit, options: List<Strin
 
             OutlinedTextField( value = quantity,
                 onValueChange = { newQuantity ->
-                quantity = newQuantity
-                calculatedPrice = if (newQuantity.isEmpty() || sellingPrice.isEmpty()) {
-                    ""
-                } else {
-                    ((sellingPrice.toDoubleOrNull() ?: 0.0) * (newQuantity.toIntOrNull() ?: 0)).toString()}
+                    quantity = newQuantity
+                    calculatedPrice = if (newQuantity.isEmpty() || sellingPrice.isEmpty()) {
+                        ""
+                    } else {
+                        ((sellingPrice.toDoubleOrNull() ?: 0.0) * (newQuantity.toIntOrNull() ?: 0)).toString()}
                 },
-                modifier = Modifier.height(50.dp).fillMaxWidth(), enabled = true)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier
+                    .height(50.dp)
+                    .fillMaxWidth(),
+                enabled = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(0xFF2B2B85),
+                    unfocusedBorderColor = Color(0xFF2B2B85),
+                    unfocusedLabelColor = Color(0xFF2B2B85),
+                    focusedLabelColor = Color(0xFF2B2B85),
+                    cursorColor = Color(0xFF2B2B85))
 
-            Spacer(modifier = Modifier.height(10.dp))
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
 
             Text(text = "Amount", color = Color(0xFF2B2B85))
             Spacer(modifier = Modifier.height(4.dp))
-            OutlinedTextField( value = calculatedPrice, onValueChange = { }, modifier = Modifier.fillMaxWidth().height(50.dp),
+            OutlinedTextField( value = calculatedPrice, onValueChange = { }, modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
                 enabled = false,
                 leadingIcon = { Icon(
                     painter = painterResource(R.drawable.naira_icon),
                     contentDescription = "naira icon",
                     modifier = Modifier.padding(top = 5.2.dp))},
+                colors = OutlinedTextFieldDefaults.colors(
+                    disabledBorderColor = Color(0xFF2B2B85),
+                    disabledTextColor = Color(0xFF2B2B85),
+                    disabledPlaceholderColor = Color(0xFF2B2B85),
+                    disabledLabelColor = Color(0xFF2B2B85))
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+
+            Spacer(modifier = Modifier.height(40.dp))
 
             Button(onClick = { coroutine.launch {
                 val quantityInt = quantity.toIntOrNull()
-                val sellingPriceDouble = sellingPrice.toDoubleOrNull()
+                val sellingPriceDouble = calculatedPrice.toDoubleOrNull()
 
-                if (quantityInt == null || sellingPriceDouble == null) { //Show error message for invalid input
+                if (quantityInt == null || sellingPriceDouble == null || calculatedPrice.toDoubleOrNull() == null) { //Show error message for invalid input
                     showError = true
                 } else if (quantityInt <= 0 || quantityInt > (productInfo?.quantity ?: 0)) { //Show error message if quantity is 0 or more than available quantity
                     showError = true
@@ -304,21 +357,11 @@ private fun SalesBottomSheet(onSalesSheetCancel: () -> Unit, options: List<Strin
                 Text(text = "SUBMIT")
 
             }
-
         }
     }
 }
 
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun SalesSearchBar(){
-//    SearchBar(query = "", onQueryChange = {}, onSearch = {}, active = true, onActiveChange = {},
-//        leadingIcon = {}) {
-//
-//    }
-//}
-
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun SalesBodyPreview() {
     TransactionHeader()

@@ -24,4 +24,5 @@
     <string name="get_access">"GET ACCESS"</string>
     <string name="forgot_password2">"Forgot Password"</string>
     <string name="in_stock">QTY: (%d)</string>
+    <string name="product_stock">Product Name: %s</string>
 </resources>

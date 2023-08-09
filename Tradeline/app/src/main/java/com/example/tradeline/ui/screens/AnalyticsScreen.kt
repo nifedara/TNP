@@ -46,7 +46,7 @@ fun AnalyticsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(24.dp),) {
-            Text(text = "Best selling products")
+            Text(text = "Best selling products", color =Color(0xFF2B2B85), fontWeight = FontWeight.Bold, fontSize = 18.sp)
             Spacer(modifier = Modifier.height(16.dp))
             if (analyticsUiState.dataList.isNotEmpty()) {
                 PieChart(data = analyticsUiState.dataList)
